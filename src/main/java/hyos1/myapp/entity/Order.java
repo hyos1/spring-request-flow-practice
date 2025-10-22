@@ -25,6 +25,9 @@ public class Order {
     private OrderStatus orderStatus;
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
     private Coupon coupon;
 }

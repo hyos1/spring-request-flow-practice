@@ -27,6 +27,7 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<UserCoupon> userCoupon;
+    @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
     public User(String name, String email, String password, UserType userType) {
