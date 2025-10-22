@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +24,10 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserType userType;
     private boolean isDeleted;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserCoupon> userCoupon;
+    private List<Order> orders = new ArrayList<>();
 
     public User(String name, String email, String password, UserType userType) {
         this.name = name;

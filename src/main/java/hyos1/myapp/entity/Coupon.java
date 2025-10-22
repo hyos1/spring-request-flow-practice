@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "coupons")
@@ -27,6 +29,9 @@ public class Coupon extends BaseTimeEntity{
     private LocalDateTime startDate;
     //쿠폰 만료일
     private LocalDateTime expiredDate;
+
+    @OneToMany(mappedBy = "coupon")
+    private List<UserCoupon> userCoupons = new ArrayList<>();
 
     public Coupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
         this.name = name;
