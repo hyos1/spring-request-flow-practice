@@ -16,7 +16,13 @@ public class OrderItem {
     private String name;
     private int orderPrice;
     private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
     private Item item;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
     private Order order;
 
     public OrderItem(String name, int orderPrice, int quantity) {

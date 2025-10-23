@@ -18,6 +18,9 @@ public class Item extends BaseTimeEntity{
     private int price;
     private int stockQuantity;
 
+    @OneToMany(mappedBy = "item")
+    private OrderItem orderItem;
+
     public Item(String name, int price, int stockQuantity) {
         this.name = name;
         this.price = price;

@@ -20,14 +20,19 @@ public class Order {
     @Id @GeneratedValue
     @Column(name = "order_id")
     private Long id;
-    private int totalPrice;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    private Coupon coupon;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_coupon_id")
+    private UserCoupon userCoupon;
+
+    @OneToMany(mappedBy = "order")
+    private OrderItem orderItem;
 }
