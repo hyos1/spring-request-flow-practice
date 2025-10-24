@@ -26,11 +26,9 @@ public class User extends BaseTimeEntity {
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "user")
-    private List<UserCoupon> userCoupon;
-    @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
-    public User(String name, String email, String password, UserType userType) {
+    private User(String name, String email, String password, UserType userType) {
         this.name = name;
         this.email = email;
         this.password = password;

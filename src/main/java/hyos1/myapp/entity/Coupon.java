@@ -30,9 +30,6 @@ public class Coupon extends BaseTimeEntity{
     //쿠폰 만료일
     private LocalDateTime expiredDate;
 
-    @OneToMany(mappedBy = "coupon")
-    private List<UserCoupon> userCoupons = new ArrayList<>();
-
     public Coupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
         this.name = name;
         this.discountAmount = discountAmount;
