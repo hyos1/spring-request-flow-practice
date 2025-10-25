@@ -33,6 +33,14 @@ public class Order {
     @JoinColumn(name = "user_coupon_id")
     private UserCoupon userCoupon;
 
+    //주문의 상세정보는 자주 필요하므로 양방향으로 결정
     @OneToMany(mappedBy = "order")
     private OrderItem orderItem;
+
+    public Order(OrderStatus orderStatus, LocalDateTime createdAt) {
+        this.orderStatus = orderStatus;
+        this.createdAt = createdAt;
+    }
+
+    //todo 총 주문 가격 합은 OrderItem for 문으로 메서드 만들기
 }
