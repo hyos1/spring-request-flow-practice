@@ -41,4 +41,8 @@ public class UserCoupon extends BaseTimeEntity{
     public static UserCoupon createUserCoupon(User user, Coupon coupon, int availableCount, CouponStatus couponStatus, LocalDateTime expiredAt) {
         return new UserCoupon(user, coupon, availableCount, couponStatus, expiredAt);
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

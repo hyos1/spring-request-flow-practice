@@ -39,20 +39,22 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    //쿠폰 사용없이 주문 생성
     public static Order createOrder(User user, OrderItem... orderItems) {
         Order order = new Order();
-        order.orderStatus = OrderStatus.ORDER;
-        order.setUser(user);
+        order.orderStatus = OrderStatus.ORDER; //주문시 ORDER 세팅
+        user.addOrder(order); //양방향 편의 메서드 사용
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
         return order;
     }
+    //쿠폰 사용하는 주문 생성
     public static Order createOrderWithCoupon(User user, UserCoupon userCoupon, OrderItem... orderItems) {
         Order order = new Order();
         order.orderStatus = OrderStatus.ORDER;
-        order.setUser(user);
-        order.setUserCoupon(userCoupon);
+        user.addOrder(order); //양방향 편의 메서드 사용
+        order.setUserCoupon(userCoupon); //단방향 메서드
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
@@ -62,10 +64,6 @@ public class Order {
     // ==연관관계 편의 메서드==
     public void setUser(User user) {
         this.user = user;
-        //중복 체크
-        if (!user.getOrders().contains(this)) {
-            user.getOrders().add(this);
-        }
     }
 
     public void setUserCoupon(UserCoupon userCoupon) {
