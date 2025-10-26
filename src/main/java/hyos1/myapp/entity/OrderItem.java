@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderItem {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "order_item_id")
     private Long id;
+
     private String name;
     private int orderPrice;
-    private int quantity;
+    private int count;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
@@ -25,13 +27,30 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public OrderItem(String name, int orderPrice, int quantity) {
+    private OrderItem(String name, int orderPrice, int count) {
         this.name = name;
         this.orderPrice = orderPrice;
-        this.quantity = quantity;
+        this.count = count;
+    }
+
+    public static OrderItem createOrderItem(Item item, String name, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem(name, orderPrice, count);
+        orderItem.setItem(item);
+
+        item.removeStock(count);
+        return orderItem;
     }
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    // ==비즈니스 로직==
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
     }
 }

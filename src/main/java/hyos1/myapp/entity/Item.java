@@ -14,28 +14,35 @@ public class Item extends BaseTimeEntity{
     @Id @GeneratedValue
     @Column(name = "item_id")
     private Long id;
+
     private String name;
     private int price;
     private int stockQuantity;
 
-    public Item(String name, int price, int stockQuantity) {
+    private Item(String name, int price, int stockQuantity) {
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
+    }
+
+    public static Item createItem(String name, int price, int stockQuantity) {
+        return new Item(name, price, stockQuantity);
     }
 
     public void changeName(String name) {
         this.name = name;
     }
 
-    public void sellItem(int quantity) {
-        if (stockQuantity - quantity < 0) {
-            throw new IllegalStateException("재고가 부족합니다.");
-        }
-        stockQuantity -= quantity;
+    // ==비즈니스 로직==
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
     }
 
-    public void cancel(int quantity) {
-        stockQuantity += quantity;
+    public void removeStock(int quantity) {
+        int restStock = stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new IllegalStateException("재고가 부족합니다.");
+        }
+        this.stockQuantity -= quantity;
     }
 }

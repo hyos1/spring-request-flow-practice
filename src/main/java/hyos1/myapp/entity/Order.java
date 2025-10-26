@@ -22,6 +22,7 @@ public class Order {
     @Id @GeneratedValue
     @Column(name = "order_id")
     private Long id;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     @CreatedDate

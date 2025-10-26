@@ -19,6 +19,7 @@ public class Coupon extends BaseTimeEntity{
     @Id @GeneratedValue
     @Column(name = "coupon_id")
     private Long id;
+
     private String name;
     private int discountAmount;
     //생성할 수량
