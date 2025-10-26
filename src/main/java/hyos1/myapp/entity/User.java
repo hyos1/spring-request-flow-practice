@@ -31,7 +31,7 @@ public class User extends BaseTimeEntity {
 
     //회원이 가진 쿠폰 목록 조회가 많을 것 같아서 양방향으로 결정
     @OneToMany(mappedBy = "user")
-    private List<UserCoupon> userCoupon;
+    private List<UserCoupon> userCoupon = new ArrayList<>();
 
     private User(String name, String email, String password, UserType userType) {
         this.name = name;
@@ -40,16 +40,10 @@ public class User extends BaseTimeEntity {
         this.userType = userType;
         this.isDeleted = false;
     }
-//
-//    public static User createUser(String name, String email, String password, UserType userType, Order order) {
-//        User user = new User(name, email, password, userType);
-//
-//    }
-//
-//    public void addOrders(Order order) {
-//        this.orders.add(order);
-//        order
-//    }
 
-    //todo Setter 없애고 변경 메서드 추가
+    // ==생성 메서드==
+    public static User createUser(String name, String email, String password, UserType userType) {
+        return new User(name, email, password, userType);
+    }
+
 }

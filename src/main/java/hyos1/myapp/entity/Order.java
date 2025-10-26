@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -35,12 +37,43 @@ public class Order {
 
     //주문의 상세정보는 자주 필요하므로 양방향으로 결정
     @OneToMany(mappedBy = "order")
-    private OrderItem orderItem;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    public Order(OrderStatus orderStatus, LocalDateTime createdAt) {
-        this.orderStatus = orderStatus;
-        this.createdAt = createdAt;
+    public static Order createOrder(User user, OrderItem... orderItems) {
+        Order order = new Order();
+        order.orderStatus = OrderStatus.ORDER;
+        order.setUser(user);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
+    }
+    public static Order createOrderWithCoupon(User user, UserCoupon userCoupon, OrderItem... orderItems) {
+        Order order = new Order();
+        order.orderStatus = OrderStatus.ORDER;
+        order.setUser(user);
+        order.setUserCoupon(userCoupon);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
     }
 
-    //todo 총 주문 가격 합은 OrderItem for 문으로 메서드 만들기
+    // ==연관관계 편의 메서드==
+    public void setUser(User user) {
+        this.user = user;
+        //중복 체크
+        if (!user.getOrders().contains(this)) {
+            user.getOrders().add(this);
+        }
+    }
+
+    public void setUserCoupon(UserCoupon userCoupon) {
+        this.userCoupon = userCoupon;
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 }
