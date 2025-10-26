@@ -30,19 +30,25 @@ public class UserCoupon extends BaseTimeEntity{
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
 
-    private UserCoupon(User user, Coupon coupon, int availableCount, CouponStatus couponStatus, LocalDateTime expiredAt) {
-        this.user = user;
-        this.coupon = coupon;
+    private UserCoupon(int availableCount, CouponStatus couponStatus, LocalDateTime expiredAt) {
         this.availableCount = availableCount;
         this.couponStatus = couponStatus;
         this.expiredAt = expiredAt;
     }
 
     public static UserCoupon createUserCoupon(User user, Coupon coupon, int availableCount, CouponStatus couponStatus, LocalDateTime expiredAt) {
-        return new UserCoupon(user, coupon, availableCount, couponStatus, expiredAt);
+        UserCoupon userCoupon = new UserCoupon(availableCount, couponStatus, expiredAt);
+        user.addUserCoupon(userCoupon);
+        userCoupon.setCoupon(coupon);
+        return userCoupon;
     }
 
+    //직접 호출 x
     public void setUser(User user) {
         this.user = user;
+    }
+
+    private void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
     }
 }

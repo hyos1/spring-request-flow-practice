@@ -30,12 +30,16 @@ public class Coupon extends BaseTimeEntity{
     //쿠폰 만료일
     private LocalDateTime expiredDate;
 
-    public Coupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
+    private Coupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
         this.name = name;
         this.discountAmount = discountAmount;
         this.quantity = quantity;
         this.availableCount = availableCount;
         this.startDate = startDate;
         this.expiredDate = expiredDate;
+    }
+
+    public static Coupon createCoupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
+        return new Coupon(name, discountAmount, quantity, availableCount, startDate, expiredDate);
     }
 }
