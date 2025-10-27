@@ -45,4 +45,9 @@ public class Item extends BaseTimeEntity{
         }
         this.stockQuantity -= quantity;
     }
+
+    //JdbcTemplate에서만 db에서 받은 ID값 할당을 위해 허용
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

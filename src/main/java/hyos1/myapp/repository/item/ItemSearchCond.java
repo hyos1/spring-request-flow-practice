@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class ItemSearchCond {
 
-    private String itemName;
+    private String name;
     private Integer maxPrice;
 
     public ItemSearchCond() {
     }
 
-    public ItemSearchCond(String itemName, Integer maxPrice) {
-        this.itemName = itemName;
+    public ItemSearchCond(String name, Integer maxPrice) {
+        this.name = name;
         this.maxPrice = maxPrice;
     }
 }
