@@ -1,4 +1,4 @@
-package hyos1.myapp.repository.jdbc;
+package hyos1.myapp.repository.item;
 
 import hyos1.myapp.dto.ItemUpdateDto;
 import hyos1.myapp.entity.Item;
