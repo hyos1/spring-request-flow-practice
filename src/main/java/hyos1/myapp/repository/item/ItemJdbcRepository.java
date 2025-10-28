@@ -86,7 +86,7 @@ public class ItemJdbcRepository implements ItemRepository {
         Integer maxPrice = cond.getMaxPrice();
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(cond);
-        String sql = "select item_id, name, price, quantity from items";
+        String sql = "select item_id as id, name, price, quantity from items";
         //동적 쿼리
         if (StringUtils.hasText(name) || maxPrice != null) {
             sql += " where";

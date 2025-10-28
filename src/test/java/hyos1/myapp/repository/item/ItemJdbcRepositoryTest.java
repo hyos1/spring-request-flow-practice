@@ -63,4 +63,40 @@ class ItemJdbcRepositoryTest {
         assertThat(findItem.getQuantity()).isEqualTo(20);
         System.out.println("findItem = " + findItem);
     }
+    @Test
+    void findAll() {
+        //given
+        Item item1 = Item.createItem("itemA-1", 10000, 10);
+        Item item2 = Item.createItem("itemA-2", 20000, 20);
+        Item item3 = Item.createItem("itemB-1", 30000, 30);
+        //when
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+
+        //then
+        //검색 조건 아예 없음
+        test(null, null, item1, item2, item3);
+
+        //itemName 검증
+        test("itemA", null, item1, item2);
+        test("temA", null, item1, item2);
+        test("itemB", null, item3);
+
+        //maxPrice 검증
+        test(null, 10000, item1);
+        test(null, 20000, item1, item2);
+        test(null, 30000, item1, item2, item3);
+
+        //둘 다 있음
+        test("itemA", 30000, item1, item2);
+
+    }
+
+    void test(String name, Integer maxPrice, Item... items) {
+        ItemSearchCond cond = new ItemSearchCond(name, maxPrice);
+        List<Item> result = itemRepository.findAll(cond);
+        assertThat(result).containsExactly(items);
+    }
+
 }
