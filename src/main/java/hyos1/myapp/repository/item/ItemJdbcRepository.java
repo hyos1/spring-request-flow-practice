@@ -10,12 +10,15 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class ItemJdbcRepository implements ItemRepository {
 
     private final NamedParameterJdbcTemplate template;
@@ -30,7 +33,7 @@ public class ItemJdbcRepository implements ItemRepository {
 
 //    @Override
 //    public Item save(Item item) {
-//        String sql = "insert into Item (name, price, stock_quantity) " +
+//        String sql = "insert into Item (name, price, quantity) " +
 //                "values (:itemName, :price, :quantity)";
 //        SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 //
@@ -51,8 +54,8 @@ public class ItemJdbcRepository implements ItemRepository {
 
     @Override
     public void update(Long itemId, ItemUpdateDto updateParam) {
-        String sql = "update Items " +
-                "set item_name = : itemName, price = :price, quantity: :quantity " +
+        String sql = "update items " +
+                "set name = :itemName, price = :price, quantity = :quantity " +
                 "where item_id = :id";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("itemName", updateParam.getItemName())
@@ -65,7 +68,7 @@ public class ItemJdbcRepository implements ItemRepository {
 
     @Override
     public Optional<Item> findById(Long id) {
-        String sql = "select item_id, name, price, stock_quantity from Items where item_id = :id";
+        String sql = "select item_id, name, price, quantity from items where item_id = :id";
 
         try {
             SqlParameterSource param = new MapSqlParameterSource()
@@ -83,7 +86,7 @@ public class ItemJdbcRepository implements ItemRepository {
         Integer maxPrice = cond.getMaxPrice();
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(cond);
-        String sql = "select item_id, name, price, stock_quantity from Items";
+        String sql = "select item_id, name, price, quantity from items";
         //동적 쿼리
         if (StringUtils.hasText(name) || maxPrice != null) {
             sql += " where";
@@ -95,7 +98,7 @@ public class ItemJdbcRepository implements ItemRepository {
         }
         if (maxPrice != null) {
             if (andFlag) {
-                sql += " and price <= :maxPrice";
+                sql += " and";
             }
             sql += " price <= :maxPrice";
         }

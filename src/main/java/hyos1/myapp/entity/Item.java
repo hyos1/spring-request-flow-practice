@@ -11,22 +11,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item extends BaseTimeEntity{
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
 
     private String name;
     private int price;
-    private int stockQuantity;
+    private int quantity;
 
-    private Item(String name, int price, int stockQuantity) {
+    private Item(String name, int price, int quantity) {
         this.name = name;
         this.price = price;
-        this.stockQuantity = stockQuantity;
+        this.quantity = quantity;
     }
 
-    public static Item createItem(String name, int price, int stockQuantity) {
-        return new Item(name, price, stockQuantity);
+    public static Item createItem(String name, int price, int quantity) {
+        return new Item(name, price, quantity);
     }
 
     public void changeName(String name) {
@@ -34,16 +34,16 @@ public class Item extends BaseTimeEntity{
     }
 
     // ==비즈니스 로직==
-    public void addStock(int quantity) {
-        this.stockQuantity += quantity;
+    public void addQuantity(int quantity) {
+        this.quantity += quantity;
     }
 
-    public void removeStock(int quantity) {
-        int restStock = stockQuantity - quantity;
+    public void removeQuantity(int quantity) {
+        int restStock = this.quantity - quantity;
         if (restStock < 0) {
             throw new IllegalStateException("재고가 부족합니다.");
         }
-        this.stockQuantity -= quantity;
+        this.quantity -= quantity;
     }
 
     //JdbcTemplate에서만 db에서 받은 ID값 할당을 위해 허용

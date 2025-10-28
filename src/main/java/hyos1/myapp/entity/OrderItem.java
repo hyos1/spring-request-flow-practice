@@ -37,7 +37,7 @@ public class OrderItem {
         OrderItem orderItem = new OrderItem(name, orderPrice, count);
         orderItem.setItem(item);
 
-        item.removeStock(count);
+        item.removeQuantity(count);
         return orderItem;
     }
 
