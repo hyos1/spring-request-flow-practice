@@ -68,7 +68,7 @@ public class ItemJdbcRepository implements ItemRepository {
 
     @Override
     public Optional<Item> findById(Long id) {
-        String sql = "select item_id, name, price, quantity from items where item_id = :id";
+        String sql = "select item_id as id, name, price, quantity from items where item_id = :id";
 
         try {
             SqlParameterSource param = new MapSqlParameterSource()
