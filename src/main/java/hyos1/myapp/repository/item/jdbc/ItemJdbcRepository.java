@@ -1,4 +1,4 @@
-package hyos1.myapp.repository.item;
+package hyos1.myapp.repository.item.jdbc;
 
 import hyos1.myapp.dto.ItemUpdateDto;
 import hyos1.myapp.entity.Item;
@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

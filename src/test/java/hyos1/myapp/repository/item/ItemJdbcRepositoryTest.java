@@ -2,17 +2,19 @@ package hyos1.myapp.repository.item;
 
 import hyos1.myapp.dto.ItemUpdateDto;
 import hyos1.myapp.entity.Item;
-import org.assertj.core.api.Assertions;
+import hyos1.myapp.repository.item.jdbc.ItemJdbcRepository;
+import hyos1.myapp.repository.item.jdbc.ItemSearchCond;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class ItemJdbcRepositoryTest {
 
     @Autowired
@@ -98,5 +100,4 @@ class ItemJdbcRepositoryTest {
         List<Item> result = itemRepository.findAll(cond);
         assertThat(result).containsExactly(items);
     }
-
 }

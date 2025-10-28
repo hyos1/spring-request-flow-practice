@@ -1,4 +1,4 @@
-package hyos1.myapp.repository.item;
+package hyos1.myapp.repository.item.jdbc;
 
 import lombok.Data;
 
