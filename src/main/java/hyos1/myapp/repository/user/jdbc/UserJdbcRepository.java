@@ -2,6 +2,9 @@ package hyos1.myapp.repository.user.jdbc;
 
 import hyos1.myapp.dto.UserUpdateDto;
 import hyos1.myapp.entity.User;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -42,18 +45,37 @@ public class UserJdbcRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return Optional.empty();
+    public void update(Long id, UserUpdateDto dto) {
+        String sql = "update users set name = :name, email = :email where user_id = :id";
+//        new BeanPropertySqlParameterSource(dto)
+        MapSqlParameterSource param = new MapSqlParameterSource()
+                .addValue("name", dto.getName())
+                .addValue("email", dto.getEmail())
+                .addValue("id", id);
+        template.update(sql, param);
     }
 
     @Override
-    public void update(Long id, UserUpdateDto dto) {
-
+    public Optional<User> findById(Long id) {
+        String sql = "select user_id as id, name, email, password, user_type from users where user_id = :id";
+        try {
+            SqlParameterSource param = new MapSqlParameterSource()
+                    .addValue("id", id);
+            User user = template.queryForObject(sql, param, userRowMapper());
+            return Optional.of(user);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
 
     @Override
     public List<User> findAll() {
-        return null;
+        String sql = "select user_id as id, name, email, password, user_type as userType, is_deleted from users";
+        return template.query(sql, userRowMapper());
+    }
+
+    private RowMapper<User> userRowMapper() {
+        return BeanPropertyRowMapper.newInstance(User.class);
     }
 }

@@ -1,5 +1,8 @@
 package hyos1.myapp.dto;
 
+import lombok.Getter;
+
+@Getter
 public class UserUpdateDto {
 
     private String name;
