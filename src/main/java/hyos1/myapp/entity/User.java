@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class User extends BaseTimeEntity {

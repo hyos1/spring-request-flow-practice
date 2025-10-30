@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_coupons")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @Setter
+@NoArgsConstructor
 public class UserCoupon extends BaseTimeEntity{
 
     @Id @GeneratedValue
@@ -44,7 +45,6 @@ public class UserCoupon extends BaseTimeEntity{
         return userCoupon;
     }
 
-    //직접 호출 x
     public void setUser(User user) {
         this.user = user;
     }

@@ -6,7 +6,7 @@ import lombok.*;
 @Entity
 @Table(name = "items")
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class Item extends BaseTimeEntity{

@@ -3,10 +3,11 @@ package hyos1.myapp.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "order_items")
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class OrderItem {
 
@@ -50,6 +51,11 @@ public class OrderItem {
     }
 
     // ==비즈니스 로직==
+    public void cancel() {
+        getItem().addQuantity(count);
+    }
+
+    // ==조회 로직==
     public int getTotalPrice() {
         return getOrderPrice() * getCount();
     }

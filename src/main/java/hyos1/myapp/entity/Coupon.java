@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "coupons")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Coupon extends BaseTimeEntity{
 
     @Id @GeneratedValue
