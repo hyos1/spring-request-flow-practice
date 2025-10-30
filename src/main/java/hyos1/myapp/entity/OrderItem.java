@@ -1,18 +1,19 @@
 package hyos1.myapp.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "order_items")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString(exclude = "order") //순환참조 문제생김
+@EqualsAndHashCode
 public class OrderItem {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private Long id;
 

@@ -9,12 +9,14 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class OrderJdbcRepository implements OrderRepository {
 
     private final NamedParameterJdbcTemplate template;
@@ -40,7 +42,7 @@ public class OrderJdbcRepository implements OrderRepository {
                 .addValue("order_status", order.getOrderStatus().name())
                 .addValue("user_coupon_id",
                         order.getUserCoupon() != null ? order.getUserCoupon().getId() : null)
-                .addValue("create_at", LocalDateTime.now());
+                .addValue("created_at", LocalDateTime.now());
         Number orderId = orderInsert.executeAndReturnKey(orderParam);
         order.setId(orderId.longValue());
         //OrderItem 저장
@@ -66,7 +68,7 @@ public class OrderJdbcRepository implements OrderRepository {
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("id", orderId);
         Order order;
-        
+
         try {
             order = template.queryForObject(sql, param, orderRowMapper());
         } catch (EmptyResultDataAccessException e) {
@@ -85,6 +87,29 @@ public class OrderJdbcRepository implements OrderRepository {
         }
 
         return Optional.of(order);
+    }
+
+    @Override
+    public List<Order> findAll(boolean fetchOrderItems) {
+        // 1. Order 기본 정보 전체 조회
+        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders";
+        List<Order> orders = template.query(sql, orderRowMapper());
+
+        // 2. OrderItem까지 필요하면 각 Order마다 조회
+        if (fetchOrderItems) {
+            String orderItemSql = "select order_item_id as id, name, order_price, count, item_id from order_items where order_id = :orderId";
+
+            for (Order order : orders) {
+                MapSqlParameterSource param = new MapSqlParameterSource()
+                        .addValue("orderId", order.getId());
+                List<OrderItem> orderItems = template.query(orderItemSql, param, orderItemRowMapper());
+                for (OrderItem orderItem : orderItems) {
+                    order.addOrderItem(orderItem);
+                }
+            }
+        }
+
+        return orders;
     }
 
     private RowMapper<Order> orderRowMapper() {
@@ -125,14 +150,5 @@ public class OrderJdbcRepository implements OrderRepository {
 
             return orderItem;
         };
-    }
-
-    @Override
-    public Order findAll() {
-        return null;
-    }
-
-    // 주문 취소
-    public void orderCancel(Long id) {
     }
 }
