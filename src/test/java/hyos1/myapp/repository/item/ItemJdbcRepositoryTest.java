@@ -30,7 +30,9 @@ class ItemJdbcRepositoryTest {
 
         //then
         System.out.println("itemA.getId() = " + itemA.getId());
-        assertThat(itemA.getId()).isEqualTo(1L);
+        Item findItem = itemRepository.findById(itemA.getId()).get();
+
+        assertThat(itemA).isEqualTo(findItem);
     }
 
     @Test
