@@ -1,10 +1,7 @@
 package hyos1.myapp.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,10 +10,13 @@ import java.util.List;
 @Entity
 @Table(name = "coupons")
 @Getter
+@Setter
 @NoArgsConstructor
-public class Coupon extends BaseTimeEntity{
+@ToString @EqualsAndHashCode
+public class Coupon extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_id")
     private Long id;
 
