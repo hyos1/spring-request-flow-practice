@@ -2,6 +2,7 @@ package hyos1.myapp.repository.order.jdbc;
 
 import hyos1.myapp.common.OrderStatus;
 import hyos1.myapp.entity.*;
+import hyos1.myapp.repository.order.OrderRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

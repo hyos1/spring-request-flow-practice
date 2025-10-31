@@ -1,4 +1,4 @@
-package hyos1.myapp.repository.coupon.jdbc;
+package hyos1.myapp.repository.coupon;
 
 import hyos1.myapp.entity.Coupon;
 

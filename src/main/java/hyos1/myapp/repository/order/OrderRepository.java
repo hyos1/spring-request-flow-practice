@@ -1,4 +1,4 @@
-package hyos1.myapp.repository.order.jdbc;
+package hyos1.myapp.repository.order;
 
 import hyos1.myapp.entity.Order;
 

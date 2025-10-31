@@ -2,10 +2,10 @@ package hyos1.myapp.repository.user.jdbc;
 
 import hyos1.myapp.dto.UserUpdateDto;
 import hyos1.myapp.entity.User;
+import hyos1.myapp.repository.user.UserRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
