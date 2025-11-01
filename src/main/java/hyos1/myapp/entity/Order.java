@@ -39,7 +39,7 @@ public class Order {
     private UserCoupon userCoupon;
 
     //주문의 상세정보는 자주 필요하므로 양방향으로 결정
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     //쿠폰 사용없이 주문 생성
@@ -73,11 +73,11 @@ public class Order {
         this.userCoupon = userCoupon;
     }
 
-    // ==비즈니스 로직==
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
+    // ==비즈니스 로직==
 
     public void cancelOrder() {
         this.setOrderStatus(CANCEL);

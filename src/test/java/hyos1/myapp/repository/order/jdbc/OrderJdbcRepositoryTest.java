@@ -53,7 +53,30 @@ class OrderJdbcRepositoryTest {
     }
 
     @Test
-    void findByIdOrder() {
+    void findById() {
+        // given
+        User user = User.createUser("testUser", "user@test.com", "1234", UserType.USER);
+        userRepository.save(user);
+
+        Item item = Item.createItem("item1", 1000, 10);
+        itemRepository.save(item);
+
+        OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), 1000, 2);
+        Order order = Order.createOrder(user, orderItem);
+        orderRepository.save(order);
+
+        //when
+        Optional<Order> findOrder = orderRepository.findById(order.getId());
+
+        //then
+        assertThat(findOrder).isPresent();
+        assertThat(findOrder.get().getUser().getId()).isEqualTo(user.getId());
+
+        // Order만 가져왔으므로 OrderItem은 비어있어야 한다.
+        assertThat(findOrder.get().getOrderItems()).isEmpty();
+    }
+    @Test
+    void findByIdWithOrderItems() {
         // given
         User user = User.createUser("testUser", "user@test.com", "1234", UserType.USER);
         userRepository.save(user);
@@ -66,13 +89,12 @@ class OrderJdbcRepositoryTest {
         orderRepository.save(order);
 
         // when
-        Optional<Order> findOrder = orderRepository.findById(order.getId(), true);
+        Optional<Order> findOrder = orderRepository.findByIdWithOrderItems(order.getId());
 
         // then
         assertThat(findOrder).isPresent();
-        assertThat(findOrder.get().getOrderItems().size()).isEqualTo(1);
+        assertThat(findOrder.get().getOrderItems()).hasSize(1);
         assertThat(findOrder.get().getUser().getId()).isEqualTo(user.getId());
-        assertThat(findOrder.get().getOrderItems().get(0).getItem().getId()).isEqualTo(item.getId());
     }
     @Test
     void findAll_withoutOrderItems() {
@@ -88,11 +110,9 @@ class OrderJdbcRepositoryTest {
         orderRepository.save(order);
 
         //when
-        List<Order> orders = orderRepository.findAll(false);
+        List<Order> orders = orderRepository.findAll();
 
         //then
-        Order findOrder = orders.get(0);
-        System.out.println("findOrder = " + findOrder);
         assertThat(orders).hasSize(1);
         assertThat(orders.get(0).getOrderItems()).isEmpty();
     }
@@ -111,14 +131,11 @@ class OrderJdbcRepositoryTest {
         orderRepository.save(order);
 
         //when
-        List<Order> orders = orderRepository.findAll(true);
+        List<Order> orders = orderRepository.findAllWithOrderItems();
 
         //then
-        Order findOrder = orders.get(0);
-        System.out.println("findOrder = " + findOrder);
         assertThat(orders).hasSize(1);
         assertThat(orders.get(0).getOrderItems()).hasSize(1);
         assertThat(orders.get(0).getOrderItems().get(0).getName()).isEqualTo("itemA");
-
     }
 }

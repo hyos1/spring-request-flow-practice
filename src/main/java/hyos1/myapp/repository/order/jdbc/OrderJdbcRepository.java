@@ -60,9 +60,24 @@ public class OrderJdbcRepository implements OrderRepository {
         return order;
     }
 
-    //OrderItems는 필요하면 true로, UserCoupon은 값이 있으면 바인딩
     @Override
-    public Optional<Order> findById(Long orderId, boolean fetchOrderItems) {
+    public Optional<Order> findById(Long orderId) {
+        // 1. Order 기본 정보 조회
+        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders where order_id = :id";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", orderId);
+        Order order;
+
+        try {
+            order = template.queryForObject(sql, param, orderRowMapper());
+            return Optional.ofNullable(order);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    // OrderItems 같이 조회
+    public Optional<Order> findByIdWithOrderItems(Long orderId) {
         // 1. Order 기본 정보 조회
         String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders where order_id = :id";
         SqlParameterSource param = new MapSqlParameterSource()
@@ -75,40 +90,41 @@ public class OrderJdbcRepository implements OrderRepository {
             return Optional.empty();
         }
 
-        // 2. OrderItem까지 필요하면 추가 조회
-        if (fetchOrderItems) {
-            String orderItemSql = "select order_item_id as id, name, order_price, count, item_id from order_items where order_id = :orderId";
-            MapSqlParameterSource orderItemParam = new MapSqlParameterSource()
-                    .addValue("orderId", order.getId());
-            List<OrderItem> orderItems = template.query(orderItemSql, orderItemParam, orderItemRowMapper());
-            for (OrderItem orderItem : orderItems) {
-                order.addOrderItem(orderItem);
-            }
+        // OrderItem 조회
+        String orderItemSql = "select order_item_id as id, name, order_price, count, item_id from order_items where order_id = :orderId";
+        MapSqlParameterSource orderItemParam = new MapSqlParameterSource()
+                .addValue("orderId", order.getId());
+        List<OrderItem> orderItems = template.query(orderItemSql, orderItemParam, orderItemRowMapper());
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
         }
-
         return Optional.of(order);
     }
 
     @Override
-    public List<Order> findAll(boolean fetchOrderItems) {
+    public List<Order> findAll() {
         // 1. Order 기본 정보 전체 조회
         String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders";
         List<Order> orders = template.query(sql, orderRowMapper());
+        return orders;
+    }
 
-        // 2. OrderItem까지 필요하면 각 Order마다 조회
-        if (fetchOrderItems) {
-            String orderItemSql = "select order_item_id as id, name, order_price, count, item_id from order_items where order_id = :orderId";
+    public List<Order> findAllWithOrderItems() {
+        // Order 기본 정보 전체 조회
+        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders";
+        List<Order> orders = template.query(sql, orderRowMapper());
 
-            for (Order order : orders) {
-                MapSqlParameterSource param = new MapSqlParameterSource()
-                        .addValue("orderId", order.getId());
-                List<OrderItem> orderItems = template.query(orderItemSql, param, orderItemRowMapper());
-                for (OrderItem orderItem : orderItems) {
-                    order.addOrderItem(orderItem);
-                }
+        // OrderItem 조회
+        String orderItemSql = "select order_item_id as id, name, order_price, count, item_id from order_items where order_id = :orderId";
+
+        for (Order order : orders) {
+            MapSqlParameterSource param = new MapSqlParameterSource()
+                    .addValue("orderId", order.getId());
+            List<OrderItem> orderItems = template.query(orderItemSql, param, orderItemRowMapper());
+            for (OrderItem orderItem : orderItems) {
+                order.addOrderItem(orderItem);
             }
         }
-
         return orders;
     }
 

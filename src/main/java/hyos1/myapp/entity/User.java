@@ -1,5 +1,6 @@
 package hyos1.myapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hyos1.myapp.common.UserType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +12,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter @Setter
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "orders")
 @EqualsAndHashCode
 public class User extends BaseTimeEntity {
 
@@ -28,6 +29,7 @@ public class User extends BaseTimeEntity {
     private boolean isDeleted;
 
     //회원이 주문 목록 조회 많이 할 것 같아서 양방향으로 결정
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 

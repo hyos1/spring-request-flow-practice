@@ -9,8 +9,8 @@ public interface OrderRepository {
 
     Order save(Order order);
 
-    Optional<Order> findById(Long orderId, boolean fetchOrderItems);
+    Optional<Order> findById(Long orderId);
 
-    List<Order> findAll(boolean fetchOrderItems);
+    List<Order> findAll();
 
 }
