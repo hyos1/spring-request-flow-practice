@@ -52,7 +52,6 @@ public class ItemJdbcRepository implements ItemRepository {
         return item;
     }
 
-    @Override
     public void update(Long itemId, ItemUpdateDto updateParam) {
         String sql = "update items " +
                 "set name = :itemName, price = :price, quantity = :quantity " +

@@ -23,8 +23,7 @@ public class CouponJpaRepository implements CouponRepository {
 
     @Override
     public Optional<Coupon> findById(Long couponId) {
-        Coupon coupon = em.find(Coupon.class, couponId);
-        return Optional.ofNullable(coupon);
+        return Optional.ofNullable(em.find(Coupon.class, couponId));
     }
 
     @Override

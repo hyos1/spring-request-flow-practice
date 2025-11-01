@@ -12,7 +12,5 @@ public interface UserRepository {
 
     Optional<User> findById(Long id);
 
-    void update(Long id, UserUpdateDto dto);
-
     List<User> findAll();
 }

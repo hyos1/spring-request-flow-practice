@@ -44,7 +44,6 @@ public class UserJdbcRepository implements UserRepository {
         return user;
     }
 
-    @Override
     public void update(Long id, UserUpdateDto dto) {
         String sql = "update users set name = :name, email = :email where user_id = :id";
 //        new BeanPropertySqlParameterSource(dto)
