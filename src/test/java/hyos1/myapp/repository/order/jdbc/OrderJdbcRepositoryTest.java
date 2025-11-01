@@ -92,6 +92,7 @@ class OrderJdbcRepositoryTest {
         Optional<Order> findOrder = orderRepository.findByIdWithOrderItems(order.getId());
 
         // then
+        System.out.println("findOrder = " + findOrder);
         assertThat(findOrder).isPresent();
         assertThat(findOrder.get().getOrderItems()).hasSize(1);
         assertThat(findOrder.get().getUser().getId()).isEqualTo(user.getId());
