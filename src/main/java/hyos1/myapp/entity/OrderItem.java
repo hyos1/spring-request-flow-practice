@@ -18,17 +18,20 @@ public class OrderItem {
     @Column(name = "order_item_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private int orderPrice;
+    @Column(nullable = false)
     private int count;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     private OrderItem(String name, int orderPrice, int count) {

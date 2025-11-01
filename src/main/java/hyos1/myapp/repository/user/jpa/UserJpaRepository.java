@@ -31,4 +31,11 @@ public class UserJpaRepository implements UserRepository {
         return em.createQuery("select u from User u", User.class)
                 .getResultList();
     }
+
+    public Optional<User> findByEmail(String email) {
+        User user = em.createQuery("select u from User u where u.email = :email", User.class)
+                .setParameter("email", email)
+                .getSingleResult();
+        return Optional.ofNullable(user);
+    }
 }

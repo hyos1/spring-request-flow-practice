@@ -15,8 +15,11 @@ public class Item extends BaseTimeEntity{
     @Column(name = "item_id")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private int price;
+    @Column(nullable = false)
     private int quantity;
 
     private Item(String name, int price, int quantity) {

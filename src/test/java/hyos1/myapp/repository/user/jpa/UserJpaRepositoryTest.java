@@ -52,4 +52,20 @@ class UserJpaRepositoryTest {
                 .containsExactly(user1.getName(), user2.getName(), user3.getName());
     }
 
+    @Test
+    void findByEmail() {
+        //given
+        User user1 = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
+        User user2 = User.createUser("userB", "asdf1@naver.com", "1234", UserType.USER);
+        User user3 = User.createUser("userC", "asdf1@naver.com", "1234", UserType.USER);
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
+        //when
+        Optional<User> findUser = userRepository.findByEmail(user1.getEmail());
+
+        //then
+        assertThat(findUser.get()).isEqualTo(user1);
+    }
 }

@@ -19,17 +19,20 @@ public class UserCoupon extends BaseTimeEntity{
     @Column(name = "user_coupon_id")
     private Long id;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CouponStatus couponStatus;
+    @Column(nullable = false)
     private LocalDateTime expiredAt;
+    @Column(nullable = false)
     private int availableCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon_id")
+    @JoinColumn(name = "coupon_id", nullable = false)
     private Coupon coupon;
 
     private UserCoupon(int availableCount, CouponStatus couponStatus, LocalDateTime expiredAt) {
