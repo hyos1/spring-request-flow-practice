@@ -2,7 +2,6 @@ package hyos1.myapp.repository.order.jdbc;
 
 import hyos1.myapp.common.OrderStatus;
 import hyos1.myapp.entity.*;
-import hyos1.myapp.repository.order.OrderRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class OrderJdbcRepository implements OrderRepository {
+public class OrderJdbcRepository {
 
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert orderInsert;
@@ -34,7 +33,6 @@ public class OrderJdbcRepository implements OrderRepository {
                 .usingGeneratedKeyColumns("order_item_id");
     }
 
-    @Override
     public Order save(Order order) {
         //Order 저장
         SqlParameterSource orderParam = new MapSqlParameterSource()
@@ -60,7 +58,6 @@ public class OrderJdbcRepository implements OrderRepository {
         return order;
     }
 
-    @Override
     public Optional<Order> findById(Long orderId) {
         // 1. Order 기본 정보 조회
         String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders where order_id = :id";
@@ -101,7 +98,6 @@ public class OrderJdbcRepository implements OrderRepository {
         return Optional.of(order);
     }
 
-    @Override
     public List<Order> findAll() {
         // 1. Order 기본 정보 전체 조회
         String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders";

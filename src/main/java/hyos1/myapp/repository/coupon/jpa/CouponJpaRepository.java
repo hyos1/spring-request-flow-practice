@@ -1,7 +1,6 @@
 package hyos1.myapp.repository.coupon.jpa;
 
 import hyos1.myapp.entity.Coupon;
-import hyos1.myapp.repository.coupon.CouponRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

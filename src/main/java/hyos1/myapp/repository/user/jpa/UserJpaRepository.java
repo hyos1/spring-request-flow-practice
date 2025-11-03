@@ -1,7 +1,6 @@
 package hyos1.myapp.repository.user.jpa;
 
 import hyos1.myapp.entity.User;
-import hyos1.myapp.repository.user.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

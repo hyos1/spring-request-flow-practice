@@ -1,4 +1,4 @@
-package hyos1.myapp.repository.user;
+package hyos1.myapp.repository.user.jpa;
 
 import hyos1.myapp.dto.UserUpdateDto;
 import hyos1.myapp.entity.User;

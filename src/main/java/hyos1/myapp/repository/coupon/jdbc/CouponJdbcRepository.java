@@ -1,7 +1,6 @@
 package hyos1.myapp.repository.coupon.jdbc;
 
 import hyos1.myapp.entity.Coupon;
-import hyos1.myapp.repository.coupon.CouponRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;

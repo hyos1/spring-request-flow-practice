@@ -1,7 +1,6 @@
 package hyos1.myapp.repository.order.jpa;
 
 import hyos1.myapp.entity.Order;
-import hyos1.myapp.repository.order.OrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;

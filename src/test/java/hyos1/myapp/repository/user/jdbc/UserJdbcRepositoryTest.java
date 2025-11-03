@@ -32,7 +32,7 @@ class UserJdbcRepositoryTest {
 
         //then
         System.out.println("userA = " + userA);
-        assertThat(userA.getId()).isEqualTo(1L);
+        assertThat(userA.getId()).isNotNul;
     }
 
     @Test

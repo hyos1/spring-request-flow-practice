@@ -2,7 +2,6 @@ package hyos1.myapp.repository.user.jdbc;
 
 import hyos1.myapp.dto.UserUpdateDto;
 import hyos1.myapp.entity.User;
-import hyos1.myapp.repository.user.UserRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserJdbcRepository implements UserRepository {
+public class UserJdbcRepository {
 
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert jdbcInsert;
@@ -29,7 +28,6 @@ public class UserJdbcRepository implements UserRepository {
                 .usingGeneratedKeyColumns("user_id");
     }
 
-    @Override
     public User save(User user) {
 //        SqlParameterSource param = new BeanPropertySqlParameterSource(user); // boolean 타입 매핑 안됨.
 //        String sql = "insert into items(name, email, password, user_type, is_deleted) values(:name, :email, :password, :userType, :is_deleted)";
@@ -54,7 +52,6 @@ public class UserJdbcRepository implements UserRepository {
         template.update(sql, param);
     }
 
-    @Override
     public Optional<User> findById(Long id) {
         String sql = "select user_id as id, name, email, password, user_type from users where user_id = :id";
         try {
@@ -68,7 +65,6 @@ public class UserJdbcRepository implements UserRepository {
     }
 
 
-    @Override
     public List<User> findAll() {
         String sql = "select user_id as id, name, email, password, user_type as userType, is_deleted from users";
         return template.query(sql, userRowMapper());

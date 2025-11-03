@@ -2,7 +2,6 @@ package hyos1.myapp.repository.item.jdbc;
 
 import hyos1.myapp.dto.ItemUpdateDto;
 import hyos1.myapp.entity.Item;
-import hyos1.myapp.repository.item.ItemRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ItemJdbcRepository implements ItemRepository {
+public class ItemJdbcRepository {
 
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert jdbcInsert;
@@ -31,7 +30,6 @@ public class ItemJdbcRepository implements ItemRepository {
                 .usingGeneratedKeyColumns("item_id");
     }
 
-//    @Override
 //    public Item save(Item item) {
 //        String sql = "insert into Item (name, price, quantity) " +
 //                "values (:itemName, :price, :quantity)";
@@ -44,7 +42,6 @@ public class ItemJdbcRepository implements ItemRepository {
 //        item.setId(key);
 //        return item;
 //    }
-    @Override
     public Item save(Item item) {
         SqlParameterSource param = new BeanPropertySqlParameterSource(item);
         Number key = jdbcInsert.executeAndReturnKey(param);
@@ -65,7 +62,6 @@ public class ItemJdbcRepository implements ItemRepository {
         template.update(sql, param);
     }
 
-    @Override
     public Optional<Item> findById(Long id) {
         String sql = "select item_id as id, name, price, quantity from items where item_id = :id";
 
@@ -79,7 +75,6 @@ public class ItemJdbcRepository implements ItemRepository {
         }
     }
 
-    @Override
     public List<Item> findAll(ItemSearchCond cond) {
         String name = cond.getName();
         Integer maxPrice = cond.getMaxPrice();
