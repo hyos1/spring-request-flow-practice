@@ -1,9 +1,7 @@
 package hyos1.myapp.dto.request;
 
 import hyos1.myapp.entity.Coupon;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,9 +21,19 @@ public class CouponCreateRequest {
     private int quantity;
     @Positive(message = "사용 가능 횟수는 1회 이상이어야 합니다.")
     private int availableCount;
-    @NotNull()
-    private LocalDateTime startDate;
     @NotNull
-    private LocalDateTime expiredDate;
+    @FutureOrPresent
+    private LocalDateTime startDate; // 쿠폰 사용가능 시작일, "생성일X"
+    @NotNull
+    @Future
+    private LocalDateTime expiredDate;// 쿠폰 만료일
 
+    public CouponCreateRequest(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
+        this.name = name;
+        this.discountAmount = discountAmount;
+        this.quantity = quantity;
+        this.availableCount = availableCount;
+        this.startDate = startDate;
+        this.expiredDate = expiredDate;
+    }
 }

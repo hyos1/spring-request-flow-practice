@@ -19,7 +19,6 @@ class CouponJdbcRepositoryTest {
     @Autowired
     private CouponJdbcRepository couponRepository;
 
-    @Rollback(value = false)
     @Test
     void save() {
         Coupon coupon = Coupon.createCoupon("할로윈", 10000, 1, 5, LocalDateTime.now().truncatedTo(ChronoUnit.MICROS), LocalDateTime.now().truncatedTo(ChronoUnit.MICROS).plusSeconds(5));
@@ -40,7 +39,6 @@ class CouponJdbcRepositoryTest {
         System.out.println("findCoupon = " + findCoupon);
     }
 
-    @Rollback(value = false)
     @Test
     void findAll() {
         Coupon coupon1 = Coupon.createCoupon("할로윈", 10000, 1, 1, LocalDateTime.now(), LocalDateTime.now().plusSeconds(5));

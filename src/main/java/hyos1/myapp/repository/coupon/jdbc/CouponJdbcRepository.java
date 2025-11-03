@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CouponJdbcRepository implements CouponRepository {
+public class CouponJdbcRepository {
 
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert jdbcInsert;
@@ -29,7 +29,6 @@ public class CouponJdbcRepository implements CouponRepository {
                 .usingGeneratedKeyColumns("coupon_id");
     }
 
-    @Override
     public Coupon save(Coupon coupon) {
         SqlParameterSource param = new BeanPropertySqlParameterSource(coupon);
         Number key = jdbcInsert.executeAndReturnKey(param);
@@ -38,7 +37,6 @@ public class CouponJdbcRepository implements CouponRepository {
         return coupon;
     }
 
-    @Override
     public Optional<Coupon> findById(Long couponId) {
         String sql = "select coupon_id as id, name, discount_amount, quantity, available_count, start_date, expired_date from coupons where coupon_id = :couponId";
         try {
@@ -51,7 +49,6 @@ public class CouponJdbcRepository implements CouponRepository {
         }
     }
 
-    @Override
     public List<Coupon> findAll() {
         String sql = "select coupon_id as id, name, discount_amount, quantity, available_count, start_date, expired_date from coupons";
         return template.query(sql, couponRowMapper());

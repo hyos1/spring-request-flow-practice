@@ -12,7 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString @EqualsAndHashCode
+@ToString
+@EqualsAndHashCode
 public class Coupon extends BaseTimeEntity {
 
     @Id
@@ -48,5 +49,11 @@ public class Coupon extends BaseTimeEntity {
 
     public static Coupon createCoupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
         return new Coupon(name, discountAmount, quantity, availableCount, startDate, expiredDate);
+    }
+
+    // ==비즈니스 로직==
+    public void updateCoupon(int availableCount, int quantity) {
+        this.availableCount = availableCount;
+        this.quantity = quantity;
     }
 }
