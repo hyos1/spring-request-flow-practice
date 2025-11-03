@@ -53,4 +53,9 @@ public class Item extends BaseTimeEntity{
     public void setId(Long id) {
         this.id = id;
     }
+
+    public void updatePriceAndQuantity(int price, int quantity) {
+        this.price = price;
+        this.quantity = quantity;
+    }
 }

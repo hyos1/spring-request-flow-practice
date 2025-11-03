@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.item.jpa;
 
-import hyos1.myapp.dto.ItemUpdateDto;
+import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.repository.item.jdbc.ItemSearchCond;
 import jakarta.persistence.EntityManager;
@@ -24,7 +24,7 @@ public class ItemJpaRepository implements ItemRepository {
         return item;
     }
 
-    public void update(Long itemId, ItemUpdateDto updateParam) {
+    public void update(Long itemId, ItemUpdateRequest updateParam) {
         Item item = findById(itemId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
         );
@@ -73,5 +73,10 @@ public class ItemJpaRepository implements ItemRepository {
         }
 
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteItem(Item item) {
+        em.remove(item);
     }
 }

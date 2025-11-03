@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.item;
 
-import hyos1.myapp.dto.ItemUpdateDto;
+import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.repository.item.jdbc.ItemJdbcRepository;
 import hyos1.myapp.repository.item.jdbc.ItemSearchCond;
@@ -56,7 +56,7 @@ class ItemJdbcRepositoryTest {
         Item itemA = Item.createItem("itemA", 10000, 10);
         itemRepository.save(itemA);
 
-        ItemUpdateDto updateDto = new ItemUpdateDto("water", 2000, 20);
+        ItemUpdateRequest updateDto = new ItemUpdateRequest("water", 2000, 20);
         //when
         itemRepository.update(itemA.getId(), updateDto);
         Item findItem = itemRepository.findById(itemA.getId()).get();

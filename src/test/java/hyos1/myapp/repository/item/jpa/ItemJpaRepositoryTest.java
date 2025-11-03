@@ -1,20 +1,17 @@
 package hyos1.myapp.repository.item.jpa;
 
-import hyos1.myapp.dto.ItemUpdateDto;
+import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.repository.item.jdbc.ItemSearchCond;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -46,7 +43,7 @@ class ItemJpaRepositoryTest {
         System.out.println("변경 전 itemA = " + itemA);
 
         //when
-        ItemUpdateDto updateDto = new ItemUpdateDto("updateA", 5000, 5);
+        ItemUpdateRequest updateDto = new ItemUpdateRequest("updateA", 5000, 5);
         itemRepository.update(itemA.getId(), updateDto);
         System.out.println("변경 후 itemA = " + itemA);
 

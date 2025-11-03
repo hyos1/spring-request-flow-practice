@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.item.jdbc;
 
-import hyos1.myapp.dto.ItemUpdateDto;
+import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.entity.Item;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -49,7 +49,7 @@ public class ItemJdbcRepository {
         return item;
     }
 
-    public void update(Long itemId, ItemUpdateDto updateParam) {
+    public void update(Long itemId, ItemUpdateRequest updateParam) {
         String sql = "update items " +
                 "set name = :itemName, price = :price, quantity = :quantity " +
                 "where item_id = :id";
