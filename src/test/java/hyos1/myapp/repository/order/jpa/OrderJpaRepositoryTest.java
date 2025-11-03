@@ -6,9 +6,8 @@ import hyos1.myapp.entity.Order;
 import hyos1.myapp.entity.OrderItem;
 import hyos1.myapp.entity.User;
 import hyos1.myapp.repository.item.jpa.ItemJpaRepository;
-import hyos1.myapp.repository.user.jdbc.UserJdbcRepository;
+import hyos1.myapp.repository.user.jpa.UserJpaRepository;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -27,18 +25,17 @@ class OrderJpaRepositoryTest {
 
     @Autowired OrderJpaRepository orderRepository;
     @Autowired
-    UserJdbcRepository userJdbcRepository;
+    UserJpaRepository userJpaRepository;
     @Autowired
     ItemJpaRepository itemRepository;
     @Autowired
     EntityManager em;
 
-    @Rollback(value = false)
     @Test
     void test() {
         //given
         User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
-        userJdbcRepository.save(user);
+        userJpaRepository.save(user);
 
         Item item1 = Item.createItem("itemA", 10000, 10);
         Item item2 = Item.createItem("itemA", 20000, 20);
@@ -57,7 +54,7 @@ class OrderJpaRepositoryTest {
 
         //then
         assertThat(savedOrder.getId()).isNotNull();
-        assertThat(savedOrder.getId()).isEqualTo(user.getId());
+        assertThat(savedOrder.getUser().getId()).isEqualTo(user.getId());
         assertThat(savedOrder.getOrderItems().size()).isEqualTo(2);
         System.out.println("savedOrder = " + savedOrder);
     }
@@ -66,7 +63,7 @@ class OrderJpaRepositoryTest {
     void findById_withOrderItems() {
         //given
         User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
-        userJdbcRepository.save(user);
+        userJpaRepository.save(user);
 
         Item item1 = Item.createItem("itemA", 10000, 10);
         Item item2 = Item.createItem("itemA", 20000, 20);
@@ -88,12 +85,11 @@ class OrderJpaRepositoryTest {
         assertThat(findOrder.get().getOrderItems().get(0).getItem().getId()).isEqualTo(item1.getId());
     }
 
-    @Rollback(value = false)
     @Test
     void findAll_and_findAllWithOrderItems() {
         //given
         User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
-        userJdbcRepository.save(user);
+        userJpaRepository.save(user);
 
         Item item1 = Item.createItem("itemA", 10000, 10);
         Item item2 = Item.createItem("itemA", 20000, 20);

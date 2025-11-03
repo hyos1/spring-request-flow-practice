@@ -22,7 +22,6 @@ class CouponJpaRepositoryTest {
     @Autowired
     CouponJpaRepository couponRepository;
 
-    @Rollback(value = false)
     @Test
     void save() {
         //given
@@ -57,7 +56,7 @@ class CouponJpaRepositoryTest {
         //given
         Coupon coupon1 = Coupon.createCoupon("할로윈", 10000, 1, 5, LocalDateTime.now().truncatedTo(ChronoUnit.MICROS), LocalDateTime.now().truncatedTo(ChronoUnit.MICROS).plusSeconds(5));
         couponRepository.save(coupon1);
-        Coupon coupon2 = Coupon.createCoupon("할로윈", 10000, 1, 5, LocalDateTime.now().truncatedTo(ChronoUnit.MICROS), LocalDateTime.now().truncatedTo(ChronoUnit.MICROS).plusSeconds(5));
+        Coupon coupon2 = Coupon.createCoupon("추석", 10000, 1, 5, LocalDateTime.now().truncatedTo(ChronoUnit.MICROS), LocalDateTime.now().truncatedTo(ChronoUnit.MICROS).plusSeconds(5));
         couponRepository.save(coupon2);
 
         //when

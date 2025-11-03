@@ -37,9 +37,9 @@ class UserJpaRepositoryTest {
     @Test
     void findAllUsers() {
         //given
-        User user1 = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
-        User user2 = User.createUser("userB", "asdf@naver.com", "1234", UserType.USER);
-        User user3 = User.createUser("userC", "asdf@naver.com", "1234", UserType.USER);
+        User user1 = User.createUser("userA", "asdf1@naver.com", "1234", UserType.USER);
+        User user2 = User.createUser("userB", "asdf2@naver.com", "1234", UserType.USER);
+        User user3 = User.createUser("userC", "asdf3@naver.com", "1234", UserType.USER);
 
         userRepository.save(user1);
         userRepository.save(user2);
@@ -55,9 +55,9 @@ class UserJpaRepositoryTest {
     @Test
     void findByEmail() {
         //given
-        User user1 = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
-        User user2 = User.createUser("userB", "asdf1@naver.com", "1234", UserType.USER);
-        User user3 = User.createUser("userC", "asdf1@naver.com", "1234", UserType.USER);
+        User user1 = User.createUser("userA", "asdf1@naver.com", "1234", UserType.USER);
+        User user2 = User.createUser("userB", "asdf2@naver.com", "1234", UserType.USER);
+        User user3 = User.createUser("userC", "asdf3@naver.com", "1234", UserType.USER);
 
         userRepository.save(user1);
         userRepository.save(user2);
