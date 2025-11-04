@@ -21,7 +21,7 @@ public class OrderItem {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private int orderPrice;
+    private int orderPrice; // 주문 당시 상품 1개의 가격
     @Column(nullable = false)
     private int count;
 

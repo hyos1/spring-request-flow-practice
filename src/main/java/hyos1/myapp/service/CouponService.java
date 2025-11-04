@@ -4,7 +4,7 @@ import hyos1.myapp.dto.request.CouponCreateRequest;
 import hyos1.myapp.dto.request.CouponUpdateRequest;
 import hyos1.myapp.dto.response.CouponResponse;
 import hyos1.myapp.entity.Coupon;
-import hyos1.myapp.repository.coupon.jpa.CouponJpaRepository;
+import hyos1.myapp.repository.coupon.jpa.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CouponService {
 
-    private final CouponJpaRepository couponRepository;
+    private final CouponRepository couponRepository;
 
     /**
      * 쿠폰 생성

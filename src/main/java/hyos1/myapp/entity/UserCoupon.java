@@ -2,7 +2,6 @@ package hyos1.myapp.entity;
 
 import hyos1.myapp.common.CouponStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -54,5 +53,9 @@ public class UserCoupon extends BaseTimeEntity{
 
     private void setCoupon(Coupon coupon) {
         this.coupon = coupon;
+    }
+
+    public void use() {
+        this.couponStatus = CouponStatus.USED;
     }
 }

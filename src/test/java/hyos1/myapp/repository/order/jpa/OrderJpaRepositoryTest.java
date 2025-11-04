@@ -76,7 +76,7 @@ class OrderJpaRepositoryTest {
         Order savedOrder = orderRepository.save(order);
 
         //when
-        Optional<Order> findOrder = orderRepository.findByIdWithOrderItems(order.getId());
+        Optional<Order> findOrder = orderRepository.findOrderWithItemsById(order.getId());
 
         //then
         assertThat(findOrder).isPresent();
@@ -106,11 +106,11 @@ class OrderJpaRepositoryTest {
 
         // when
         System.out.println("==== findAll() ====");
-        List<Order> orders1 = orderRepository.findAll();
+        List<Order> orders1 = orderRepository.findAllOrders();
         System.out.println("orders1.size() = " + orders1.size());
 
         System.out.println("==== findAllWithOrderItems() ====");
-        List<Order> orders2 = orderRepository.findAllWithOrderItems();
+        List<Order> orders2 = orderRepository.findAllOrdersWithItems();
         System.out.println("orders2.size() = " + orders2.size());
 
         // then
@@ -125,5 +125,49 @@ class OrderJpaRepositoryTest {
         System.out.println("==== orderItems in findAllWithOrderItems() ====");
         orders2.get(0).getOrderItems().forEach(oi ->
                 System.out.println("  item = " + oi.getItem().getName()));
+    }
+
+    @Rollback(value = false)
+    @Test
+    void 연관된_객체_전체조회() {
+        //given
+        User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
+        userJpaRepository.save(user);
+
+        Item item1 = Item.createItem("itemA", 10000, 10);
+        Item item2 = Item.createItem("itemA", 20000, 20);
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+
+        OrderItem orderItem1 = OrderItem.createOrderItem(item1, item1.getName(), item1.getPrice(), 2);
+        OrderItem orderItem2 = OrderItem.createOrderItem(item2, item2.getName(), item2.getPrice(), 2);
+        Order order = Order.createOrder(user, orderItem1, orderItem2);
+
+        //when
+        Order savedOrder = orderRepository.save(order);
+        //2번째 주문
+        //given
+        User user2 = User.createUser("userB", "asdf@naver.com", "1234", UserType.USER);
+        userJpaRepository.save(user);
+
+        Item item3 = Item.createItem("itemB", 10000, 10);
+        Item item4 = Item.createItem("itemB", 20000, 20);
+        itemRepository.save(item3);
+        itemRepository.save(item4);
+
+        OrderItem orderItem3 = OrderItem.createOrderItem(item3, item3.getName(), item3.getPrice(), 2);
+        OrderItem orderItem4 = OrderItem.createOrderItem(item4, item4.getName(), item4.getPrice(), 2);
+        Order order2 = Order.createOrder(user, orderItem3, orderItem4);
+
+        //when
+        Order savedOrder2 = orderRepository.save(order2);
+        em.flush();
+        em.clear();
+
+        //then
+        List<Order> result = orderRepository.findOrdersByUserIdWithCoupon(user.getId());
+        for (Order order1 : result) {
+            System.out.println("order = " + order1);
+        }
     }
 }

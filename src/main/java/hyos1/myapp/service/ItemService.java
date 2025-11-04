@@ -5,7 +5,7 @@ import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.dto.response.ItemResponse;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.repository.item.jdbc.ItemSearchCond;
-import hyos1.myapp.repository.item.jpa.ItemJpaRepository;
+import hyos1.myapp.repository.item.jpa.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ItemService {
 
-    private final ItemJpaRepository itemJpaRepository;
+    private final ItemRepository itemRepository;
 
     /**
      * 아이템 생성
      */
     @Transactional
     public ItemResponse save(ItemCreateRequest request) {
-        Item savedItem = itemJpaRepository.save(Item.createItem(request.getName(), request.getPrice(), request.getQuantity()));
+        Item savedItem = itemRepository.save(Item.createItem(request.getName(), request.getPrice(), request.getQuantity()));
         return ItemResponse.fromEntity(savedItem);
     }
 
@@ -33,7 +33,7 @@ public class ItemService {
      * 전체 아이템 조회
      */
     public List<ItemResponse> findAll(ItemSearchCond cond) {
-        List<Item> items = itemJpaRepository.findAll(cond);
+        List<Item> items = itemRepository.findAll(cond);
         return items.stream()
                 .map(i -> ItemResponse.fromEntity(i))
                 .collect(Collectors.toList());
@@ -43,7 +43,7 @@ public class ItemService {
      * 단건 아이템 조회
      */
     public ItemResponse findById(Long itemId) {
-        Item item = itemJpaRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
         return ItemResponse.fromEntity(item);
     }
 
@@ -52,7 +52,7 @@ public class ItemService {
      */
     @Transactional
     public ItemResponse updateItem(Long itemId, ItemUpdateRequest request) {
-        Item item = itemJpaRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
         item.updatePriceAndQuantity(request.getPrice(), request.getQuantity());
         return ItemResponse.fromEntity(item);
     }
@@ -62,7 +62,7 @@ public class ItemService {
      */
     @Transactional
     public void deleteItem(Long itemId) {
-        Item item = itemJpaRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("삭제할 아이템이 존재하지 않습니다. id = " + itemId));
-        itemJpaRepository.deleteItem(item);
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("삭제할 아이템이 존재하지 않습니다. id = " + itemId));
+        itemRepository.deleteItem(item);
     }
 }

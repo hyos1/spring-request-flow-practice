@@ -1,6 +1,5 @@
 package hyos1.myapp.dto.request;
 
-import hyos1.myapp.entity.Coupon;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
