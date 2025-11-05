@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +62,7 @@ public class OrderService {
         Order order = Order.createOrderWithCoupon(user, userCoupon, orderItem);
         orderRepository.save(order); // cascadeALL로 인해 OrderItem도 같이 저장됨
 
-        userCoupon.use(); //쿠폰 상태 변경
+        userCoupon.use(LocalDateTime.now()); //쿠폰 상태 변경
         return OrderResponse.fromEntity(order);
     }
 

@@ -51,12 +51,12 @@ public class Coupon extends BaseTimeEntity {
 
     // ==비즈니스 로직==
 
-    //쿠폰 사용 기간 검증
+    //발급 가능한 기간 검증
     public boolean isAvailable(LocalDateTime now) {
         return now.isAfter(startDate) && now.isBefore(expiredDate);
     }
 
-    // 수량 감소
+    // 발급 시 수량 감소
     public void decreaseQuantity() {
         if (this.quantity <= 0) {
             throw new IllegalStateException("쿠폰 수량이 모두 소진되었습니다.");

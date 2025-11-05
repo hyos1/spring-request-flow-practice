@@ -9,12 +9,16 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_coupons")
-@Getter @Setter
+@Table(name = "user_coupons",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "coupon_id"})
+)
+@Getter
+@Setter
 @NoArgsConstructor
-public class UserCoupon extends BaseTimeEntity{
+public class UserCoupon extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_coupon_id")
     private Long id;
 
@@ -57,7 +61,27 @@ public class UserCoupon extends BaseTimeEntity{
         this.coupon = coupon;
     }
 
-    public void use() {
-        this.couponStatus = CouponStatus.USED;
+    public void use(LocalDateTime now) {
+        validateUsable(now);
+        this.availableCount -= 1;
+        if (availableCount == 0) {
+            this.couponStatus = CouponStatus.USED;
+        }
+    }
+    private void validateUsable(LocalDateTime now) {
+        validateAvailableCount();
+        validateExpired(now);
+    }
+    private void validateAvailableCount() {
+        if (this.availableCount <= 0) {
+            throw new IllegalStateException("쿠폰 사용 가능 횟수를 모두 소진했습니다.");
+        }
+    }
+
+    private void validateExpired(LocalDateTime now) {
+        if (this.expiredAt.isBefore(now)) {
+            this.couponStatus = CouponStatus.EXPIRED;
+            throw new IllegalStateException("만료된 쿠폰입니다.");
+        }
     }
 }
