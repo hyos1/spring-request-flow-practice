@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class Coupon extends BaseTimeEntity {
 
     @Id
@@ -50,6 +50,26 @@ public class Coupon extends BaseTimeEntity {
     }
 
     // ==비즈니스 로직==
+
+    //쿠폰 사용 기간 검증
+    public boolean isAvailable(LocalDateTime now) {
+        return now.isAfter(startDate) && now.isBefore(expiredDate);
+    }
+
+    // 수량 감소
+    public void decreaseQuantity() {
+        if (this.quantity <= 0) {
+            throw new IllegalStateException("쿠폰 수량이 모두 소진되었습니다.");
+        }
+        this.quantity -= 1;
+    }
+
+    //발급 가능한 수량인지 확인
+    public boolean canIssue() {
+        return this.quantity > 0;
+    }
+
+    //쿠폰 수정
     public void updateCoupon(int availableCount, int quantity) {
         this.availableCount = availableCount;
         this.quantity = quantity;

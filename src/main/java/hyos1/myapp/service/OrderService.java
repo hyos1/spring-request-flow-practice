@@ -1,6 +1,6 @@
 package hyos1.myapp.service;
 
-import hyos1.myapp.dto.request.OrderResponse;
+import hyos1.myapp.dto.response.OrderResponse;
 import hyos1.myapp.entity.*;
 import hyos1.myapp.repository.item.jpa.ItemRepository;
 import hyos1.myapp.repository.order.jpa.OrderRepository;

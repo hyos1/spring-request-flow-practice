@@ -13,7 +13,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @ToString(exclude = "orders")
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class User extends BaseTimeEntity {
 
     @Id

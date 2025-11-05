@@ -21,8 +21,10 @@ public class UserCoupon extends BaseTimeEntity{
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CouponStatus couponStatus;
+
     @Column(nullable = false)
     private LocalDateTime expiredAt;
+
     @Column(nullable = false)
     private int availableCount;
 

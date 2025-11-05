@@ -53,7 +53,7 @@ public class CouponService {
      * 단건 쿠폰 조회
      */
     public CouponResponse findById(Long couponId) {
-        Coupon coupon = couponRepository.findById(couponId)
+        Coupon coupon = couponRepository.findByIdWithLock(couponId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
         return CouponResponse.fromEntity(coupon);
     }
@@ -63,7 +63,7 @@ public class CouponService {
      */
     @Transactional
     public CouponResponse updateCoupon(Long couponId, CouponUpdateRequest request) {
-        Coupon coupon = couponRepository.findById(couponId)
+        Coupon coupon = couponRepository.findByIdWithLock(couponId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
         coupon.updateCoupon(request.getAvailableCount(), request.getQuantity());
         return CouponResponse.fromEntity(coupon);

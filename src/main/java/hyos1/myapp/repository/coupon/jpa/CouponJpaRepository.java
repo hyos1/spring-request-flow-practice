@@ -2,6 +2,7 @@ package hyos1.myapp.repository.coupon.jpa;
 
 import hyos1.myapp.entity.Coupon;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,8 +22,10 @@ public class CouponJpaRepository implements CouponRepository {
     }
 
     @Override
-    public Optional<Coupon> findById(Long couponId) {
-        return Optional.ofNullable(em.find(Coupon.class, couponId));
+    public Optional<Coupon> findByIdWithLock(Long couponId) {
+        Coupon coupon = em.find(Coupon.class, couponId,
+                LockModeType.PESSIMISTIC_WRITE);
+        return Optional.ofNullable(coupon);
     }
 
     @Override

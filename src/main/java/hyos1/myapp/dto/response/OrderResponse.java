@@ -1,4 +1,4 @@
-package hyos1.myapp.dto.request;
+package hyos1.myapp.dto.response;
 
 import hyos1.myapp.common.OrderStatus;
 import hyos1.myapp.entity.Order;

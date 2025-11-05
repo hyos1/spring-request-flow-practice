@@ -127,7 +127,6 @@ class OrderJpaRepositoryTest {
                 System.out.println("  item = " + oi.getItem().getName()));
     }
 
-    @Rollback(value = false)
     @Test
     void 연관된_객체_전체조회() {
         //given

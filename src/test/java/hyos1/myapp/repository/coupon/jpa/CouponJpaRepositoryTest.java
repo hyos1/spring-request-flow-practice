@@ -1,11 +1,9 @@
 package hyos1.myapp.repository.coupon.jpa;
 
 import hyos1.myapp.entity.Coupon;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -13,7 +11,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -30,7 +27,7 @@ class CouponJpaRepositoryTest {
         couponRepository.save(coupon);
         //then
         System.out.println("coupon.getId() = " + coupon.getId());
-        Coupon findCoupon = couponRepository.findById(coupon.getId()).get();
+        Coupon findCoupon = couponRepository.findByIdWithLock(coupon.getId()).get();
         assertThat(coupon).isEqualTo(findCoupon);
     }
 
@@ -43,7 +40,7 @@ class CouponJpaRepositoryTest {
         couponRepository.save(coupon);
 
         //then
-        Coupon findCoupon = couponRepository.findById(coupon.getId()).get();
+        Coupon findCoupon = couponRepository.findByIdWithLock(coupon.getId()).get();
         assertThat(findCoupon.getId()).isEqualTo(coupon.getId());
         assertThat(findCoupon.getName()).isEqualTo(coupon.getName());
         assertThat(findCoupon.getQuantity()).isEqualTo(coupon.getQuantity());
