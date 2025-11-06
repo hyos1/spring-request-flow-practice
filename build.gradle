@@ -34,6 +34,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	//쿼리 파라미터 로그 확인
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok'
 
 	// DB drivers

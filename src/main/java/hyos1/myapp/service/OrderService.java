@@ -58,11 +58,14 @@ public class OrderService {
         Item item = itemRepository.findById(itemId).orElseThrow(
                 () -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
+        //쿠폰 사용가능한지 검증 및 차감
+        userCoupon.use(LocalDateTime.now());
+
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), item.getPrice(), count);
         Order order = Order.createOrderWithCoupon(user, userCoupon, orderItem);
+
         orderRepository.save(order); // cascadeALL로 인해 OrderItem도 같이 저장됨
 
-        userCoupon.use(LocalDateTime.now()); //쿠폰 상태 변경
         return OrderResponse.fromEntity(order);
     }
 

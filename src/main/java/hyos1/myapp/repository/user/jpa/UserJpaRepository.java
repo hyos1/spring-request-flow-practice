@@ -31,6 +31,15 @@ public class UserJpaRepository implements UserRepository {
                 .getResultList();
     }
 
+    @Override
+    public boolean existsByEmail(String email) {
+        Long count = em.createQuery("select count(u) from User u " +
+                        "where u.email = :email", Long.class)
+                .setParameter("email", email)
+                .getSingleResult();
+        return count > 0;
+    }
+
     public Optional<User> findByEmail(String email) {
         User user = em.createQuery("select u from User u where u.email = :email", User.class)
                 .setParameter("email", email)
