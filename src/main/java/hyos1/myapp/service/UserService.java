@@ -1,6 +1,6 @@
 package hyos1.myapp.service;
 
-import hyos1.myapp.dto.request.UserSignUpRequest;
+import hyos1.myapp.dto.request.SignUpRequest;
 import hyos1.myapp.dto.request.UserUpdateRequest;
 import hyos1.myapp.dto.response.UserResponse;
 import hyos1.myapp.entity.User;
@@ -25,7 +25,7 @@ public class UserService {
      * 회원가입
      */
     @Transactional
-    public UserResponse signUp(UserSignUpRequest request) {
+    public UserResponse signUp(SignUpRequest request) {
         //이메일 중복 검증
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("이미 사용중인 이메일입니다.");
@@ -35,7 +35,7 @@ public class UserService {
                 request.getName(),
                 request.getEmail(),
                 encodePassword,
-                request.getUserType()
+                request.getUserRole()
         );
         userRepository.save(user);
 
