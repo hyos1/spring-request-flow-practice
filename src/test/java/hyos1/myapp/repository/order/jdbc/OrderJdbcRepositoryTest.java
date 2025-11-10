@@ -1,13 +1,12 @@
 package hyos1.myapp.repository.order.jdbc;
 
-import hyos1.myapp.common.UserType;
+import hyos1.myapp.common.UserRole;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.entity.Order;
 import hyos1.myapp.entity.OrderItem;
 import hyos1.myapp.entity.User;
 import hyos1.myapp.repository.item.jdbc.ItemJdbcRepository;
 import hyos1.myapp.repository.user.jdbc.UserJdbcRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -31,7 +29,7 @@ class OrderJdbcRepositoryTest {
     @Test
     void save() {
         //given
-        User user = User.createUser("userA", "user@test.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "user@test.com", "1234", UserRole.ROLE_USER);
         userRepository.save(user);
 
         Item item1 = Item.createItem("item1", 1000, 10);
@@ -55,7 +53,7 @@ class OrderJdbcRepositoryTest {
     @Test
     void findById() {
         // given
-        User user = User.createUser("testUser", "user@test.com", "1234", UserType.USER);
+        User user = User.createUser("testUser", "user@test.com", "1234", UserRole.ROLE_USER);
         userRepository.save(user);
 
         Item item = Item.createItem("item1", 1000, 10);
@@ -78,7 +76,7 @@ class OrderJdbcRepositoryTest {
     @Test
     void findByIdWithOrderItems() {
         // given
-        User user = User.createUser("testUser", "user@test.com", "1234", UserType.USER);
+        User user = User.createUser("testUser", "user@test.com", "1234", UserRole.ROLE_USER);
         userRepository.save(user);
 
         Item item = Item.createItem("item1", 1000, 10);
@@ -100,7 +98,7 @@ class OrderJdbcRepositoryTest {
     @Test
     void findAll_withoutOrderItems() {
         //given
-        User user = User.createUser("userA", "a@naver.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "a@naver.com", "1234", UserRole.ROLE_USER);
         userRepository.save(user);
 
         Item item = Item.createItem("itemA", 1000, 10);
@@ -121,7 +119,7 @@ class OrderJdbcRepositoryTest {
     @Test
     void findAll_withOrderItems() {
         //given
-        User user = User.createUser("userA", "a@naver.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "a@naver.com", "1234", UserRole.ROLE_USER);
         userRepository.save(user);
 
         Item item = Item.createItem("itemA", 1000, 10);

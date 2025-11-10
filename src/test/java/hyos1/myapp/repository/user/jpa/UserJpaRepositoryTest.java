@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.user.jpa;
 
-import hyos1.myapp.common.UserType;
+import hyos1.myapp.common.UserRole;
 import hyos1.myapp.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -22,7 +22,7 @@ class UserJpaRepositoryTest {
     @Test
     void saveAndFindById() {
         //given
-        User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "asdf@naver.com", "1234", UserRole.ROLE_USER);
 
         //when
         User savedUser = userRepository.save(user);
@@ -37,9 +37,9 @@ class UserJpaRepositoryTest {
     @Test
     void findAllUsers() {
         //given
-        User user1 = User.createUser("userA", "asdf1@naver.com", "1234", UserType.USER);
-        User user2 = User.createUser("userB", "asdf2@naver.com", "1234", UserType.USER);
-        User user3 = User.createUser("userC", "asdf3@naver.com", "1234", UserType.USER);
+        User user1 = User.createUser("userA", "asdf1@naver.com", "1234", UserRole.ROLE_USER);
+        User user2 = User.createUser("userB", "asdf2@naver.com", "1234", UserRole.ROLE_USER);
+        User user3 = User.createUser("userC", "asdf3@naver.com", "1234", UserRole.ROLE_USER);
 
         userRepository.save(user1);
         userRepository.save(user2);
@@ -55,9 +55,9 @@ class UserJpaRepositoryTest {
     @Test
     void findByEmail() {
         //given
-        User user1 = User.createUser("userA", "asdf1@naver.com", "1234", UserType.USER);
-        User user2 = User.createUser("userB", "asdf2@naver.com", "1234", UserType.USER);
-        User user3 = User.createUser("userC", "asdf3@naver.com", "1234", UserType.USER);
+        User user1 = User.createUser("userA", "asdf1@naver.com", "1234", UserRole.ROLE_USER);
+        User user2 = User.createUser("userB", "asdf2@naver.com", "1234", UserRole.ROLE_USER);
+        User user3 = User.createUser("userC", "asdf3@naver.com", "1234", UserRole.ROLE_USER);
 
         userRepository.save(user1);
         userRepository.save(user2);

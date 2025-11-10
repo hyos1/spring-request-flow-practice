@@ -35,7 +35,7 @@ public class UserJdbcRepository {
                 .addValue("name", user.getName())
                 .addValue("email", user.getEmail())
                 .addValue("password", user.getPassword())
-                .addValue("userType", user.getUserType().name())
+                .addValue("user_role", user.getUserRole().name())
                 .addValue("is_deleted", user.isDeleted());
         Number key = jdbcInsert.executeAndReturnKey(param);
         user.setId(key.longValue());
@@ -53,7 +53,7 @@ public class UserJdbcRepository {
     }
 
     public Optional<User> findById(Long id) {
-        String sql = "select user_id as id, name, email, password, user_type from users where user_id = :id";
+        String sql = "select user_id as id, name, email, password, user_role from users where user_id = :id";
         try {
             SqlParameterSource param = new MapSqlParameterSource()
                     .addValue("id", id);
@@ -66,7 +66,7 @@ public class UserJdbcRepository {
 
 
     public List<User> findAll() {
-        String sql = "select user_id as id, name, email, password, user_type as userType, is_deleted from users";
+        String sql = "select user_id as id, name, email, password, user_role as userRole, is_deleted from users";
         return template.query(sql, userRowMapper());
     }
 

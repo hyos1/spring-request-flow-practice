@@ -1,7 +1,7 @@
 package hyos1.myapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hyos1.myapp.common.UserType;
+import hyos1.myapp.common.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,7 +29,7 @@ public class User extends BaseTimeEntity {
     private String password;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private UserRole userRole;
     private boolean isDeleted;
 
     //회원이 주문 목록 조회 많이 할 것 같아서 양방향으로 결정
@@ -41,17 +41,17 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<UserCoupon> userCoupons = new ArrayList<>();
 
-    private User(String name, String email, String password, UserType userType) {
+    private User(String name, String email, String password, UserRole userRole) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.userType = userType;
+        this.userRole = userRole;
         this.isDeleted = false;
     }
 
     // ==생성 메서드==
-    public static User createUser(String name, String email, String password, UserType userType) {
-        return new User(name, email, password, userType);
+    public static User createUser(String name, String email, String password, UserRole userRole) {
+        return new User(name, email, password, userRole);
     }
 
     // ==연관관계 편의 메서드==

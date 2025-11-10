@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.order.jpa;
 
-import hyos1.myapp.common.UserType;
+import hyos1.myapp.common.UserRole;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.entity.Order;
 import hyos1.myapp.entity.OrderItem;
@@ -11,13 +11,12 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -34,7 +33,7 @@ class OrderJpaRepositoryTest {
     @Test
     void test() {
         //given
-        User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "asdf@naver.com", "1234", UserRole.ROLE_USER);
         userJpaRepository.save(user);
 
         Item item1 = Item.createItem("itemA", 10000, 10);
@@ -62,7 +61,7 @@ class OrderJpaRepositoryTest {
     @Test
     void findById_withOrderItems() {
         //given
-        User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "asdf@naver.com", "1234", UserRole.ROLE_USER);
         userJpaRepository.save(user);
 
         Item item1 = Item.createItem("itemA", 10000, 10);
@@ -88,7 +87,7 @@ class OrderJpaRepositoryTest {
     @Test
     void findAll_and_findAllWithOrderItems() {
         //given
-        User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "asdf@naver.com", "1234", UserRole.ROLE_USER);
         userJpaRepository.save(user);
 
         Item item1 = Item.createItem("itemA", 10000, 10);
@@ -130,7 +129,7 @@ class OrderJpaRepositoryTest {
     @Test
     void 연관된_객체_전체조회() {
         //given
-        User user = User.createUser("userA", "asdf@naver.com", "1234", UserType.USER);
+        User user = User.createUser("userA", "asdf@naver.com", "1234", UserRole.ROLE_USER);
         userJpaRepository.save(user);
 
         Item item1 = Item.createItem("itemA", 10000, 10);
@@ -146,7 +145,7 @@ class OrderJpaRepositoryTest {
         Order savedOrder = orderRepository.save(order);
         //2번째 주문
         //given
-        User user2 = User.createUser("userB", "asdf@naver.com", "1234", UserType.USER);
+        User user2 = User.createUser("userB", "asdf@naver.com", "1234", UserRole.ROLE_USER);
         userJpaRepository.save(user);
 
         Item item3 = Item.createItem("itemB", 10000, 10);
