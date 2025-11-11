@@ -2,6 +2,7 @@ package hyos1.myapp.repository.user.jpa;
 
 import hyos1.myapp.entity.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -40,10 +41,15 @@ public class UserJpaRepository implements UserRepository {
         return count > 0;
     }
 
+    @Override
     public Optional<User> findByEmail(String email) {
-        User user = em.createQuery("select u from User u where u.email = :email", User.class)
-                .setParameter("email", email)
-                .getSingleResult();
-        return Optional.ofNullable(user);
+        try {
+            User user = em.createQuery("select u from User u where u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 }
