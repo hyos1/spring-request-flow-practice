@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     //전체 회원 조회
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")//UserRole이 ROLE_ADMIN만 가능
     @GetMapping
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userService.findAll());
@@ -42,12 +43,7 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long userId,
                                                    @Valid @RequestBody UserUpdateRequest request,
                                                    @AuthenticationPrincipal AuthUser authUser) {
-        if (!authUser.getUserId().equals(userId) &&
-                !authUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-            throw new AccessDeniedException("권한이 없습니다.");
-        }
-
-        UserResponse response = userService.updateUser(userId, request);
+        UserResponse response = userService.updateUser(authUser.getUserId(), userId, request);
         return ResponseEntity.ok(response);
     }
 
@@ -55,11 +51,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId,
                                            @AuthenticationPrincipal AuthUser authUser) {
-        if (!authUser.getUserId().equals(userId) &&
-                !authUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-            throw new AccessDeniedException("권한이 없습니다.");
-        }
-        userService.deleteUser(userId);
+        userService.deleteUser(authUser.getUserId(), userId);
         return ResponseEntity.noContent().build();
     }
 }
