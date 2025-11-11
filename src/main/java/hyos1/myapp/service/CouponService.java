@@ -24,9 +24,13 @@ public class CouponService {
      * 쿠폰 생성
      */
     @Transactional
-    public CouponResponse save(CouponCreateRequest request) {
+    public CouponResponse createCoupon(CouponCreateRequest request) {
         //시작일, 종료일 검증
         validationCouponDates(request.getStartDate(), request.getExpiredDate());
+
+        if (couponRepository.existsByName(request.getName())) {
+            throw new IllegalArgumentException("이미 존재하는 쿠폰 이름입니다.");
+        }
 
         Coupon coupon = Coupon.createCoupon(
                 request.getName(),
@@ -37,7 +41,18 @@ public class CouponService {
                 request.getExpiredDate()
         );
         Coupon savedCoupon = couponRepository.save(coupon);
+
         return CouponResponse.fromEntity(savedCoupon);
+    }
+
+    /**
+     * 단건 쿠폰 조회
+     */
+    public CouponResponse findById(Long couponId) {
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+
+        return CouponResponse.fromEntity(coupon);
     }
 
     /**
@@ -45,17 +60,9 @@ public class CouponService {
      */
     public List<CouponResponse> findAll() {
         List<Coupon> coupons = couponRepository.findAll();
+
         return coupons.stream().map(c -> CouponResponse.fromEntity(c))
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * 단건 쿠폰 조회
-     */
-    public CouponResponse findById(Long couponId) {
-        Coupon coupon = couponRepository.findByIdWithLock(couponId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
-        return CouponResponse.fromEntity(coupon);
     }
 
     /**
@@ -65,7 +72,9 @@ public class CouponService {
     public CouponResponse updateCoupon(Long couponId, CouponUpdateRequest request) {
         Coupon coupon = couponRepository.findByIdWithLock(couponId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+
         coupon.updateCoupon(request.getAvailableCount(), request.getQuantity());
+
         return CouponResponse.fromEntity(coupon);
     }
 
@@ -73,5 +82,6 @@ public class CouponService {
         if (expiredDate.isBefore(startDate)) {
             throw new IllegalArgumentException("쿠폰 종료일은 시작일 이후여야 합니다.");
         }
+
     }
 }
