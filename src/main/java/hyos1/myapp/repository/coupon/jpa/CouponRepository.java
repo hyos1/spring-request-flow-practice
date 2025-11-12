@@ -9,7 +9,11 @@ public interface CouponRepository {
 
     Coupon save(Coupon coupon);
 
+    Optional<Coupon> findById(Long couponId);
+
     Optional<Coupon> findByIdWithLock(Long couponId);
 
     List<Coupon> findAll();
+
+    boolean existsByName(String name);
 }
