@@ -20,11 +20,11 @@ public class CouponCreateRequest {
     private int quantity;
     @Positive(message = "사용 가능 횟수는 1회 이상이어야 합니다.")
     private int availableCount;
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message = "시작일은 필수입니다.")
+    @FutureOrPresent(message = "시작일은 현재 시각 또는 이후여야 합니다.")
     private LocalDateTime startDate; // 쿠폰 사용가능 시작일, "생성일X"
-    @NotNull
-    @Future
+    @NotNull(message = "만료일은 필수입니다.")
+    @Future(message = "만료일은 미래 시점이어야 합니다.")
     private LocalDateTime expiredDate;// 쿠폰 만료일
 
     public CouponCreateRequest(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {

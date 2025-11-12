@@ -1,6 +1,7 @@
 package hyos1.myapp.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CouponUpdateRequest {
-    @NotNull(message = "1인당 이용가능 횟수를 입력해주세요.")
+    @Positive(message = "1인당 이용가능 횟수는 0 이상이어야 합니다.")
     private int availableCount;
-    @NotNull(message = "수량을 입력해주세요.")
+    @Positive(message = "수량은 0 이상이어야 합니다.")
     private int quantity;
 }
