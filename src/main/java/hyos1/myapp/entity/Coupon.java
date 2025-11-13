@@ -46,14 +46,18 @@ public class Coupon extends BaseTimeEntity {
     }
 
     public static Coupon createCoupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
+        // 만료일이 시작일보다 빠르면 오류
+        if (expiredDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("시작일은 만료일보다 전이여야 합니다.");
+        }
         return new Coupon(name, discountAmount, quantity, availableCount, startDate, expiredDate);
     }
 
     // ==비즈니스 로직==
 
-    //발급 가능한 기간 검증
-    public boolean isAvailable(LocalDateTime now) {
-        return now.isAfter(startDate) && now.isBefore(expiredDate);
+    // 쿠폰 발급 가능한 기간인지 검증
+    public boolean isAvailableNow(LocalDateTime now) {
+        return (now.equals(startDate) || now.isAfter(startDate)) && now.isBefore(expiredDate);
     }
 
     // 발급 시 수량 감소
