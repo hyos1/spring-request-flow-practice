@@ -39,16 +39,19 @@ public class UserCouponService {
         Coupon coupon = couponRepository.findByIdWithLock(couponId).orElseThrow(
                 () -> new IllegalArgumentException("쿠폰을 찾을 수 없습니다."));
 
-        //검증 로직
-        if (userCouponRepository.existsByUserIdAndCouponId(userId, couponId)) {
-            throw new IllegalStateException("이미 발급된 쿠폰입니다.");
-        }
-
-        if (!coupon.isAvailable(LocalDateTime.now())) {
+        //발급 가능 기간 검증
+        if (!coupon.isAvailableNow(LocalDateTime.now())) {
             throw new IllegalStateException("발급 가능한 날짜가 아닙니다.");
         }
+
+        //발급 가능한 수량이 있는지 검증
         if (!coupon.canIssue()) {
             throw new IllegalStateException("쿠폰 수량이 모두 소진되었습니다.");
+        }
+
+        //중복 발급 검증
+        if (userCouponRepository.existsByUserIdAndCouponId(userId, couponId)) {
+            throw new IllegalStateException("이미 발급된 쿠폰입니다.");
         }
 
         //수량 감소
@@ -68,7 +71,27 @@ public class UserCouponService {
     }
 
     /**
-     * 사용자 쿠폰 단건 조회
+     * 사용자의 쿠폰 단건 조회
+     */
+    public UserCouponResponse findByUserIdAndCouponId(Long userId, Long couponId) {
+        UserCoupon userCoupon = userCouponRepository.findByUserIdAndCouponId(userId, couponId).orElseThrow(
+                () -> new IllegalArgumentException("발급받지 않은 쿠폰입니다.")
+        );
+        return UserCouponResponse.fromEntity(userCoupon);
+    }
+
+    /**
+     * 사용자의 쿠폰 전체 조회
+     */
+    public List<UserCouponResponse> findAllByUserId(Long userId) {
+        List<UserCoupon> result = userCouponRepository.findAllByUserId(userId);
+        return result.stream()
+                .map(uc -> UserCouponResponse.fromEntity(uc))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * [관리자]UserCoupon 단건 조회
      */
     public UserCouponResponse findById(Long userCouponId) {
         UserCoupon userCoupon = userCouponRepository.findById(userCouponId).orElseThrow(
