@@ -43,7 +43,8 @@ public class ItemService {
      * 단건 아이템 조회
      */
     public ItemResponse findById(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+        Item item = itemRepository.findById(itemId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
         return ItemResponse.fromEntity(item);
     }
 
@@ -52,7 +53,8 @@ public class ItemService {
      */
     @Transactional
     public ItemResponse updateItem(Long itemId, ItemUpdateRequest request) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+        Item item = itemRepository.findById(itemId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
         item.updatePriceAndQuantity(request.getPrice(), request.getQuantity());
         return ItemResponse.fromEntity(item);
     }
@@ -62,7 +64,8 @@ public class ItemService {
      */
     @Transactional
     public void deleteItem(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("삭제할 아이템이 존재하지 않습니다. id = " + itemId));
+        Item item = itemRepository.findById(itemId).orElseThrow(
+                () -> new IllegalArgumentException("삭제할 아이템이 존재하지 않습니다. id = " + itemId));
         itemRepository.deleteItem(item);
     }
 }

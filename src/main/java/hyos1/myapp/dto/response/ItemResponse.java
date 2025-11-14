@@ -14,6 +14,6 @@ public class ItemResponse {
     private int quantity;
 
     public static ItemResponse fromEntity(Item item) {
-        return new ItemResponse(item.getId(), item.getName(), item.getPrice(), item.getQuantity());
+        return new ItemResponse(item.getId(), item.getName(), item.getPrice(), item.getStock());
     }
 }

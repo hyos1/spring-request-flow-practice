@@ -20,16 +20,16 @@ public class Item extends BaseTimeEntity{
     @Column(nullable = false)
     private int price;
     @Column(nullable = false)
-    private int quantity;
+    private int stock;
 
-    private Item(String name, int price, int quantity) {
+    private Item(String name, int price, int stock) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
+        this.stock = stock;
     }
 
-    public static Item createItem(String name, int price, int quantity) {
-        return new Item(name, price, quantity);
+    public static Item createItem(String name, int price, int stock) {
+        return new Item(name, price, stock);
     }
 
     public void changeName(String name) {
@@ -38,15 +38,19 @@ public class Item extends BaseTimeEntity{
 
     // ==비즈니스 로직==
     public void addQuantity(int quantity) {
-        this.quantity += quantity;
+        this.stock += quantity;
     }
 
-    public void removeQuantity(int quantity) {
-        int restStock = this.quantity - quantity;
-        if (restStock < 0) {
-            throw new IllegalStateException("재고가 부족합니다.");
+    // 검증 + 재고 감소
+    public void decreaseStock(int quantity) {
+        if (!hasEnoughStock(quantity)) {
+            throw new IllegalStateException("상품 재고가 부족합니다.");
         }
-        this.quantity -= quantity;
+        this.stock -= quantity;
+    }
+
+    private boolean hasEnoughStock(int quantity) {
+        return stock >= quantity;
     }
 
     //JdbcTemplate에서만 db에서 받은 ID값 할당을 위해 허용
@@ -56,6 +60,6 @@ public class Item extends BaseTimeEntity{
 
     public void updatePriceAndQuantity(int price, int quantity) {
         this.price = price;
-        this.quantity = quantity;
+        this.stock = quantity;
     }
 }
