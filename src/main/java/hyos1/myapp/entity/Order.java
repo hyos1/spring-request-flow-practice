@@ -26,8 +26,12 @@ public class Order {
     private Long id;
 
     @Column(nullable = false)
+    private int finalPrice; // 최종 금액
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -43,25 +47,22 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    //쿠폰 사용없이 주문 생성
-    public static Order createOrder(User user, OrderItem... orderItems) {
+    // ===== 주문 생성 =====
+    public static Order createOrder(User user, List<OrderItem> orderItems, UserCoupon userCoupon) {
         Order order = new Order();
         order.orderStatus = ORDER; //주문시 ORDER 세팅
         user.addOrder(order); //양방향 편의 메서드 사용
+
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
-        return order;
-    }
-    //쿠폰 사용하는 주문 생성
-    public static Order createOrderWithCoupon(User user, UserCoupon userCoupon, OrderItem... orderItems) {
-        Order order = new Order();
-        order.orderStatus = ORDER;
-        user.addOrder(order); //양방향 편의 메서드 사용
-        order.setUserCoupon(userCoupon); //단방향 메서드
-        for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
+
+        // 쿠폰 사용시에만 연관관계 설정
+        if (userCoupon != null) {
+            order.setUserCoupon(userCoupon);
         }
+
+        order.calculateFinalPrice();
         return order;
     }
 
@@ -78,17 +79,44 @@ public class Order {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
-    // ==비즈니스 로직==
 
+    // ==비즈니스 로직==
     public void cancelOrder() {
+        // 주문 상태 변경
         this.setOrderStatus(CANCEL);
 
+        // 주문 상품 재고 복원
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }
+
+        // 쿠폰 복원
+//        if (userCoupon != null) {
+//            userCoupon.restore();
+//        }
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    private void calculateFinalPrice() {
+        int totalPrice = 0;
+
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+
+        //쿠폰 적용
+        if (userCoupon != null) {
+            totalPrice -= userCoupon.getCoupon().getDiscountAmount();
+        }
+
+        // 음수 방지
+        if (totalPrice < 0) {
+            totalPrice = 0;
+        }
+
+        this.finalPrice = totalPrice;
     }
 }
