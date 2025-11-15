@@ -1,5 +1,6 @@
 package hyos1.myapp.service;
 
+import hyos1.myapp.dto.request.OrderCreateRequest;
 import hyos1.myapp.dto.response.OrderResponse;
 import hyos1.myapp.entity.*;
 import hyos1.myapp.repository.item.jpa.ItemRepository;
@@ -11,8 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static hyos1.myapp.dto.request.OrderCreateRequest.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,43 +30,48 @@ public class OrderService {
 
 
     /**
-     * [사용자]쿠폰 없이 주문 생성
-     * 한 주문에 한 아이템만 담을 수 있다고 가정
+     * [사용자] 주문 생성
      */
     @Transactional
-    public OrderResponse save(Long userId, Long itemId, int count) {
+    public OrderResponse createOrder(Long userId, OrderCreateRequest request) {
+
+        // 1. 사용자 조회
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        Item item = itemRepository.findById(itemId).orElseThrow(
-                () -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+        List<OrderItem> orderItems = new ArrayList<>();
 
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), item.getPrice(), count);
-        Order order = Order.createOrder(user, orderItem);
-        orderRepository.save(order); // cascadeALL로 인해 OrderItem도 같이 저장됨
+        // 2. 요청한 상품 유무 확인 및 주문상품 생성
+        for (OrderItemRequest orderItemRequest : request.getItems()) {
+            Item item = itemRepository.findByIdWithLock(orderItemRequest.getItemId()).orElseThrow(
+                    () -> new IllegalArgumentException("상품을 찾을 수 없습니다.")
+            );
 
-        return OrderResponse.fromEntity(order);
-    }
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderItemRequest.getQuantity());
 
-    /**
-     * [사용자]쿠폰 사용하는 주문 생성
-     */
-    @Transactional
-    public OrderResponse saveWithCoupon(Long userId, Long userCouponId, Long itemId, int count) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            // 수량 확인 후 재고 감소
+            item.decreaseStock(orderItemRequest.getQuantity());
 
-        UserCoupon userCoupon = userCouponRepository.findById(userCouponId).orElseThrow(
-                () -> new IllegalArgumentException("쿠폰을 찾을 수 없습니다."));
+            orderItems.add(orderItem);
+        }
 
-        Item item = itemRepository.findById(itemId).orElseThrow(
-                () -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+        // 3. 쿠폰 사용 여부 처리
+        UserCoupon userCoupon = null;
+        if (request.getUserCouponId() != null) {
+            userCoupon = userCouponRepository.findById(request.getUserCouponId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 쿠폰이 존재하지 않습니다."));
 
-        //쿠폰 사용가능한지 검증 및 차감
-        userCoupon.use(LocalDateTime.now());
+            // 쿠폰 검증 (명시적으로 어떤 검증을 했는지 보여주기 위함)
+            userCoupon.checkOwner(userId);
+            userCoupon.checkAvailable();
+            userCoupon.checkNotExpired(LocalDateTime.now());
 
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), item.getPrice(), count);
-        Order order = Order.createOrderWithCoupon(user, userCoupon, orderItem);
+            // 검증 통과 후 확인
+            userCoupon.use();
+        }
+
+        // 4. 주문 생성
+        Order order = Order.createOrder(user, orderItems, userCoupon);
 
         orderRepository.save(order); // cascadeALL로 인해 OrderItem도 같이 저장됨
 
