@@ -32,7 +32,7 @@ class ItemJpaRepositoryTest {
         assertThat(savedItem.getId()).isNotNull();
         assertThat(savedItem.getName()).isEqualTo(itemA.getName());
         assertThat(savedItem.getPrice()).isEqualTo(itemA.getPrice());
-        assertThat(savedItem.getQuantity()).isEqualTo(itemA.getQuantity());
+        assertThat(savedItem.getStock()).isEqualTo(itemA.getStock());
     }
 
     @Test
@@ -44,14 +44,16 @@ class ItemJpaRepositoryTest {
 
         //when
         ItemUpdateRequest updateDto = new ItemUpdateRequest("updateA", 5000, 5);
-        itemRepository.update(itemA.getId(), updateDto);
+        itemA.setName(updateDto.getItemName());
+        itemA.setPrice(updateDto.getPrice());
+        itemA.setStock(updateDto.getStock());
         System.out.println("변경 후 itemA = " + itemA);
 
         //then
         Item findItem = itemRepository.findById(itemA.getId()).get();
         assertThat(findItem.getName()).isEqualTo(updateDto.getItemName());
         assertThat(findItem.getPrice()).isEqualTo(updateDto.getPrice());
-        assertThat(findItem.getQuantity()).isEqualTo(updateDto.getQuantity());
+        assertThat(findItem.getStock()).isEqualTo(updateDto.getStock());
     }
 
     @Test

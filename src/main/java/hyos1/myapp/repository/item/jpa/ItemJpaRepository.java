@@ -24,15 +24,6 @@ public class ItemJpaRepository implements ItemRepository {
         return item;
     }
 
-    public void update(Long itemId, ItemUpdateRequest updateParam) {
-        Item item = findById(itemId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
-        );
-        item.setName(updateParam.getItemName());
-        item.setPrice(updateParam.getPrice());
-        item.setQuantity(updateParam.getQuantity());
-    }
-
     @Override
     public Optional<Item> findById(Long itemId) {
         return Optional.ofNullable(em.find(Item.class, itemId));

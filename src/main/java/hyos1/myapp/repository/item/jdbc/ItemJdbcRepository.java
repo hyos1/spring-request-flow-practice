@@ -31,8 +31,8 @@ public class ItemJdbcRepository {
     }
 
 //    public Item save(Item item) {
-//        String sql = "insert into Item (name, price, quantity) " +
-//                "values (:itemName, :price, :quantity)";
+//        String sql = "insert into Item (name, price, stock) " +
+//                "values (:itemName, :price, :stock)";
 //        SqlParameterSource param = new BeanPropertySqlParameterSource(item);
 //
 //        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -51,19 +51,19 @@ public class ItemJdbcRepository {
 
     public void update(Long itemId, ItemUpdateRequest updateParam) {
         String sql = "update items " +
-                "set name = :itemName, price = :price, quantity = :quantity " +
+                "set name = :itemName, price = :price, stock = :stock " +
                 "where item_id = :id";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("itemName", updateParam.getItemName())
                 .addValue("price", updateParam.getPrice())
-                .addValue("quantity", updateParam.getQuantity())
+                .addValue("stock", updateParam.getStock())
                 .addValue("id", itemId);
 
         template.update(sql, param);
     }
 
     public Optional<Item> findById(Long id) {
-        String sql = "select item_id as id, name, price, quantity from items where item_id = :id";
+        String sql = "select item_id as id, name, price, stock from items where item_id = :id";
 
         try {
             SqlParameterSource param = new MapSqlParameterSource()
@@ -80,7 +80,7 @@ public class ItemJdbcRepository {
         Integer maxPrice = cond.getMaxPrice();
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(cond);
-        String sql = "select item_id as id, name, price, quantity from items";
+        String sql = "select item_id as id, name, price, stock from items";
         //동적 쿼리
         if (StringUtils.hasText(name) || maxPrice != null) {
             sql += " where";

@@ -55,7 +55,7 @@ public class ItemService {
     public ItemResponse updateItem(Long itemId, ItemUpdateRequest request) {
         Item item = itemRepository.findById(itemId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
-        item.updatePriceAndQuantity(request.getPrice(), request.getQuantity());
+        item.updatePriceAndQuantity(request.getPrice(), request.getStock());
         return ItemResponse.fromEntity(item);
     }
 

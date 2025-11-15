@@ -64,7 +64,7 @@ class ItemJdbcRepositoryTest {
         //then
         assertThat(findItem.getName()).isEqualTo("water");
         assertThat(findItem.getPrice()).isEqualTo(2000);
-        assertThat(findItem.getQuantity()).isEqualTo(20);
+        assertThat(findItem.getStock()).isEqualTo(20);
         System.out.println("findItem = " + findItem);
     }
     @Test

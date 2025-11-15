@@ -18,5 +18,5 @@ public class ItemUpdateRequest {
     private int price;
     @NotNull
     @Positive
-    private int quantity;
+    private int stock;
 }

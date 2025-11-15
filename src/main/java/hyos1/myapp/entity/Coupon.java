@@ -21,6 +21,7 @@ public class Coupon extends BaseTimeEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
+    //할인금액
     @Column(nullable = false)
     private int discountAmount;
     //생성할 수량
