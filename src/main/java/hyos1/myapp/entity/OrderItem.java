@@ -23,7 +23,7 @@ public class OrderItem {
     @Column(nullable = false)
     private int orderPrice; // 주문 당시 상품 1개의 가격
     @Column(nullable = false)
-    private int count;
+    private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
@@ -34,17 +34,16 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    private OrderItem(String name, int orderPrice, int count) {
+    private OrderItem(String name, int orderPrice, int quantity) {
         this.name = name;
         this.orderPrice = orderPrice;
-        this.count = count;
+        this.quantity = quantity;
     }
 
-    public static OrderItem createOrderItem(Item item, String name, int orderPrice, int count) {
-        OrderItem orderItem = new OrderItem(name, orderPrice, count);
+    public static OrderItem createOrderItem(Item item, int quantity) {
+        OrderItem orderItem = new OrderItem(item.getName(), item.getPrice(), quantity);
         orderItem.setItem(item);
 
-        item.removeQuantity(count);
         return orderItem;
     }
 
@@ -58,11 +57,11 @@ public class OrderItem {
 
     // ==비즈니스 로직==
     public void cancel() {
-        getItem().addQuantity(count);
+        getItem().addQuantity(quantity);
     }
 
     // ==조회 로직==
     public int getTotalPrice() {
-        return getOrderPrice() * getCount();
+        return getOrderPrice() * getQuantity();
     }
 }

@@ -48,7 +48,7 @@ public class OrderJdbcRepository {
             SqlParameterSource orderItemParam = new MapSqlParameterSource()
                     .addValue("name", orderItem.getName())
                     .addValue("order_price", orderItem.getOrderPrice())
-                    .addValue("count", orderItem.getCount())
+                    .addValue("quantity", orderItem.getQuantity())
                     .addValue("item_id", orderItem.getItem().getId())
                     .addValue("order_id", order.getId());
             Number orderItemId = orderItemInsert.executeAndReturnKey(orderItemParam);
@@ -88,7 +88,7 @@ public class OrderJdbcRepository {
         }
 
         // OrderItem 조회
-        String orderItemSql = "select order_item_id as id, name, order_price, count, item_id from order_items where order_id = :orderId";
+        String orderItemSql = "select order_item_id as id, name, order_price, quantity, item_id from order_items where order_id = :orderId";
         MapSqlParameterSource orderItemParam = new MapSqlParameterSource()
                 .addValue("orderId", order.getId());
         List<OrderItem> orderItems = template.query(orderItemSql, orderItemParam, orderItemRowMapper());
@@ -111,7 +111,7 @@ public class OrderJdbcRepository {
         List<Order> orders = template.query(sql, orderRowMapper());
 
         // OrderItem 조회
-        String orderItemSql = "select order_item_id as id, name, order_price, count, item_id from order_items where order_id = :orderId";
+        String orderItemSql = "select order_item_id as id, name, order_price, quantity, item_id from order_items where order_id = :orderId";
 
         for (Order order : orders) {
             MapSqlParameterSource param = new MapSqlParameterSource()
@@ -154,7 +154,7 @@ public class OrderJdbcRepository {
             orderItem.setId(rs.getLong("id"));
             orderItem.setName(rs.getString("name"));
             orderItem.setOrderPrice(rs.getInt("order_price"));
-            orderItem.setCount(rs.getInt("count"));
+            orderItem.setQuantity(rs.getInt("quantity"));
 
             Item item = new Item();
             item.setId(rs.getLong("item_id"));
