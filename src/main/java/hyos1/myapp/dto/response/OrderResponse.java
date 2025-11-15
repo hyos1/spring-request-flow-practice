@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -18,24 +20,38 @@ public class OrderResponse {
 
     private Long orderId;
     private String userName;
-    private String itemName;
-    private int itemPrice;
-    private int count;
     private String couponName;
     private OrderStatus orderStatus;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; // 주문 시간
+    private int finalPrice;
+    private List<OrderItemResponse> orderItems;
 
     public static OrderResponse fromEntity(Order order) {
-        OrderItem orderItem = order.getOrderItems().isEmpty() ? null : order.getOrderItems().get(0);
         return OrderResponse.builder()
                 .orderId(order.getId())
                 .userName(order.getUser().getName())
-                .itemName(orderItem != null ? orderItem.getName() : null)
-                .itemPrice(orderItem != null ? orderItem.getOrderPrice() : 0)
-                .count(orderItem != null ? orderItem.getCount() : 0)
                 .couponName(order.getUserCoupon() != null ? order.getUserCoupon().getCoupon().getName() : null)
                 .orderStatus(order.getOrderStatus())
                 .createdAt(order.getCreatedAt())
+                .finalPrice(order.getFinalPrice())
+                .orderItems(
+                        order.getOrderItems().stream()
+                                .map(oi -> new OrderItemResponse(oi))
+                                .collect(Collectors.toList())
+                )
                 .build();
+    }
+
+    @Getter
+    static class OrderItemResponse {
+        private String itemName;
+        private int itemPrice;
+        private int quantity;
+
+        public OrderItemResponse(OrderItem orderItem) {
+            itemName = orderItem.getName();
+            itemPrice = orderItem.getOrderPrice();
+            quantity = orderItem.getQuantity();
+        }
     }
 }
