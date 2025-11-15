@@ -10,7 +10,10 @@ public interface ItemRepository {
 
     Item save(Item item);
 
-    Optional<Item> findById(Long id);
+    Optional<Item> findById(Long itemId);
+
+    // 비관적 락 + 3초 대기
+    Optional<Item> findByIdWithLock(Long itemId);
 
     List<Item> findAll(ItemSearchCond cond);
 
