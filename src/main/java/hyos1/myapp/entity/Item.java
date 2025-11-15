@@ -43,14 +43,10 @@ public class Item extends BaseTimeEntity{
 
     // 검증 + 재고 감소
     public void decreaseStock(int quantity) {
-        if (!hasEnoughStock(quantity)) {
+        if (this.stock - quantity < 0) {
             throw new IllegalStateException("상품 재고가 부족합니다.");
         }
         this.stock -= quantity;
-    }
-
-    private boolean hasEnoughStock(int quantity) {
-        return stock >= quantity;
     }
 
     //JdbcTemplate에서만 db에서 받은 ID값 할당을 위해 허용
@@ -58,8 +54,8 @@ public class Item extends BaseTimeEntity{
         this.id = id;
     }
 
-    public void updatePriceAndQuantity(int price, int quantity) {
+    public void updatePriceAndStock(int price, int stock) {
         this.price = price;
-        this.stock = quantity;
+        this.stock = stock;
     }
 }
