@@ -1,5 +1,6 @@
 package hyos1.myapp.service;
 
+import hyos1.myapp.common.OrderStatus;
 import hyos1.myapp.dto.request.OrderCreateRequest;
 import hyos1.myapp.dto.response.OrderResponse;
 import hyos1.myapp.entity.*;
@@ -28,10 +29,7 @@ public class OrderService {
     private final ItemRepository itemRepository;
     private final UserCouponRepository userCouponRepository;
 
-
-    /**
-     * [사용자] 주문 생성
-     */
+    // [사용자] 주문 생성
     @Transactional
     public OrderResponse createOrder(Long userId, OrderCreateRequest request) {
 
@@ -43,6 +41,7 @@ public class OrderService {
 
         // 2. 요청한 상품 유무 확인 및 주문상품 생성
         for (OrderItemRequest orderItemRequest : request.getItems()) {
+            // 동시에 주문시 재고 문제 생길 수 있으므로 LOCK
             Item item = itemRepository.findByIdWithLock(orderItemRequest.getItemId()).orElseThrow(
                     () -> new IllegalArgumentException("상품을 찾을 수 없습니다.")
             );
@@ -78,44 +77,46 @@ public class OrderService {
         return OrderResponse.fromEntity(order);
     }
 
-    /**
-     * [사용자]주문 목록 조회
-     */
-    public List<OrderResponse> getUserOrders(Long userId) {
-        List<Order> orders = orderRepository.findOrdersByUserIdWithCoupon(userId);
+    // [사용자] 주문 단건 조회(OrderItem-> BatchSize 사용)
+    public OrderResponse findUserOrderById(Long userId, Long orderId) {
+        Order order = orderRepository.findByUserIdAndOrderId(userId, orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
 
-        return orders.stream()
-                .map(o -> OrderResponse.fromEntity(o))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * [사용자]단일 주문 조회(OrderItem 포함)
-     */
-    public OrderResponse findByIdWithOrderItems(Long orderId) {
-        Order order = orderRepository.findOrderWithItemsById(orderId).orElseThrow(
-                () -> new IllegalArgumentException("주문을 찾을 수 없습니다.")
-        );
         return OrderResponse.fromEntity(order);
     }
 
-    /**
-     * [관리자]전체 주문 조회
-     */
-    public List<OrderResponse> findAllWithOrderItems() {
-        List<Order> orders = orderRepository.findAllOrdersWithItems();
+    // [사용자] 주문 전체 조회(OrderItem-> BatchSize 사용)
+    public List<OrderResponse> findUserOrders(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+
         return orders.stream()
                 .map(o -> OrderResponse.fromEntity(o))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * [사용자/관리자]주문 취소
-     */
-    @Transactional
-    public void cancelOrder(Long orderId) {
+    // [관리자]주문 단건 조회
+    public OrderResponse findOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+                () -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+        return OrderResponse.fromEntity(order);
+    }
+
+    // [관리자]주문 전체 조회
+    public List<OrderResponse> findAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream().map(o -> OrderResponse.fromEntity(o))
+                .collect(Collectors.toList());
+    }
+
+    // 주문 취소
+    @Transactional
+    public void cancelOrder(Long userId, Long orderId) {
+        Order order = orderRepository.findByUserIdAndOrderId(userId, orderId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+        if (order.getOrderStatus() == OrderStatus.CANCEL) {
+            throw new IllegalStateException("이미 취소된 주문입니다.");
+        }
+
         order.cancelOrder();
     }
 }
