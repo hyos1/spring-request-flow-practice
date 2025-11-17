@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
                         .requestMatchers("/auth/refresh").authenticated() // 토큰 재발급은 JWT 필요 (추가 예정)
-                        .requestMatchers("/coupons", "/coupons/**").hasAuthority(UserRole.Authority.ADMIN)
                         .requestMatchers("/user_coupons", "/user_coupons/**").authenticated()
                         .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
                         .requestMatchers("/open").permitAll()

@@ -8,10 +8,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * SecurityConfig에 ADMIN만 접근 가능하도록 설정함
+ */
 @RestController
 @RequestMapping("/coupons")
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ public class CouponController {
     private final CouponService couponService;
 
     // 쿠폰 생성
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<CouponResponse> createCoupon(@Valid @RequestBody CouponCreateRequest request) {
         CouponResponse response = couponService.createCoupon(request);
@@ -39,6 +44,7 @@ public class CouponController {
     }
 
     // 쿠폰 수정
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{couponId}")
     public ResponseEntity<CouponResponse> updateCoupon(
             @PathVariable Long couponId,
