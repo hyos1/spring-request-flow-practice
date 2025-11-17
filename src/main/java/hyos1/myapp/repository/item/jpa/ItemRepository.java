@@ -15,6 +15,7 @@ public interface ItemRepository {
     // 비관적 락 + 3초 대기
     Optional<Item> findByIdWithLock(Long itemId);
 
+    // 검색 조건 name, maxPrice
     List<Item> findAll(ItemSearchCond cond);
 
     void deleteItem(Item item);

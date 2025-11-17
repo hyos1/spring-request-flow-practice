@@ -1,11 +1,9 @@
 package hyos1.myapp.dto.response;
 
-import hyos1.myapp.common.CouponStatus;
 import hyos1.myapp.entity.UserCoupon;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 

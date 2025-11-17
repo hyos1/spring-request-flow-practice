@@ -20,14 +20,9 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
 
-    /**
-     * 쿠폰 생성
-     */
+    // [관리자] 쿠폰 생성
     @Transactional
     public CouponResponse createCoupon(CouponCreateRequest request) {
-        //시작일, 종료일 검증
-        validationCouponDates(request.getStartDate(), request.getExpiredDate());
-
         if (couponRepository.existsByName(request.getName())) {
             throw new IllegalArgumentException("이미 존재하는 쿠폰 이름입니다.");
         }
@@ -45,9 +40,7 @@ public class CouponService {
         return CouponResponse.fromEntity(savedCoupon);
     }
 
-    /**
-     * 단건 쿠폰 조회
-     */
+    // 쿠폰 단건 조회
     public CouponResponse findById(Long couponId) {
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
@@ -55,9 +48,7 @@ public class CouponService {
         return CouponResponse.fromEntity(coupon);
     }
 
-    /**
-     * 전체 쿠폰 조회
-     */
+    // 쿠폰 전체 조회
     public List<CouponResponse> findAll() {
         List<Coupon> coupons = couponRepository.findAll();
 
@@ -65,9 +56,7 @@ public class CouponService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 쿠폰 수정
-     */
+    // [관리자] 쿠폰 수정
     @Transactional
     public CouponResponse updateCoupon(Long couponId, CouponUpdateRequest request) {
         Coupon coupon = couponRepository.findByIdWithLock(couponId)
@@ -76,12 +65,5 @@ public class CouponService {
         coupon.updateCoupon(request.getAvailableCount(), request.getQuantity());
 
         return CouponResponse.fromEntity(coupon);
-    }
-
-    private void validationCouponDates(LocalDateTime startDate, LocalDateTime expiredDate) {
-        if (expiredDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("쿠폰 종료일은 시작일 이후여야 합니다.");
-        }
-
     }
 }

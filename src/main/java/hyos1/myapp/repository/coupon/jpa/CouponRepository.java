@@ -11,9 +11,11 @@ public interface CouponRepository {
 
     Optional<Coupon> findById(Long couponId);
 
+    // 비관적 락으로 쿠폰 조회
     Optional<Coupon> findByIdWithLock(Long couponId);
 
     List<Coupon> findAll();
 
+    // 동일 이름 존재 확인
     boolean existsByName(String name);
 }
