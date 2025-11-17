@@ -23,27 +23,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * 회원가입
-     */
-    @Transactional
-    public UserResponse signUp(SignUpRequest request) {
-        //이메일 중복 검증
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용중인 이메일입니다.");
-        }
-        String encodePassword = passwordEncoder.encode(request.getPassword());
-        User user = User.createUser(
-                request.getName(),
-                request.getEmail(),
-                encodePassword,
-                request.getUserRole()
-        );
-        userRepository.save(user);
-
-        return UserResponse.fromEntity(user);
-    }
-
-    /**
      * 단일 회원 조회
      */
     public UserResponse findById(Long userId) {

@@ -34,13 +34,4 @@ public class AuthController {
         String bearerToken = authService.login(request);
         return ResponseEntity.ok().header("Authorization", bearerToken).build();
     }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/user")
-    public ResponseEntity<List<UserResponse>> findAll() {
-        List<User> users = authService.findAll();
-        List<UserResponse> results = users.stream().map(u -> UserResponse.fromEntity(u))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(results);
-    }
 }

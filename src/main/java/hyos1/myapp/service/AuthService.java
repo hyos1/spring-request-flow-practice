@@ -56,8 +56,4 @@ public class AuthService {
         // JWT 생성 후 반환
         return jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
     }
-
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
 }
