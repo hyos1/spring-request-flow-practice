@@ -1,5 +1,7 @@
 package hyos1.myapp.service;
 
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.config.JwtUtil;
 import hyos1.myapp.dto.request.LoginRequest;
 import hyos1.myapp.dto.request.SignUpRequest;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static hyos1.myapp.common.exception.constant.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +30,7 @@ public class AuthService {
     public void signup(SignUpRequest request) {
         // 이메일 중복 검사
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalStateException("이미 존재하는 이메일입니다.");
+            throw new ClientException(EMAIL_ALREADY_EXISTS);
         }
 
         // 비밀번호 암호화
@@ -46,12 +50,12 @@ public class AuthService {
     public String login(LoginRequest request) {
         // 이메일 검증
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다.")
+                () -> new ClientException(USER_NOT_FOUND)
         );
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new ClientException(INVALID_PASSWORD);
         }
         // JWT 생성 후 반환
         return jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());

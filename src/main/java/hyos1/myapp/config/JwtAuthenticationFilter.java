@@ -73,13 +73,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return true; // 검증 성공
         } catch (ExpiredJwtException e) {
             log.info("JWT 만료: userId={}, URI={}", e.getClaims().getSubject(), request.getRequestURI());
-            sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "인증이 필요합니다.");
+            sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException e) {
             log.error("JWT 검증 실패 [{}]: URI={}", e.getClass().getSimpleName(), request.getRequestURI(), e);
-            sendErrorResponse(response, HttpStatus.BAD_REQUEST, "인증이 필요합니다.");
+            sendErrorResponse(response, HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다.");
         } catch (Exception e) {
             log.error("예상치 못한 오류: URI={}", request.getRequestURI(), e);
-            sendErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "요청 처리 중 오류가 발생했습니다.");
+            sendErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "JWT 처리 중 오류가 발생했습니다.");
         }
         return false; // 검증 실패
     }

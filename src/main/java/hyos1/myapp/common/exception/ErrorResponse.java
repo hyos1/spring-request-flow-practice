@@ -1,5 +1,6 @@
-package hyos1.myapp.common.exception.constant;
+package hyos1.myapp.common.exception;
 
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
