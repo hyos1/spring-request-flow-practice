@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/user_coupons", "/user_coupons/**").authenticated()
                         .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
                         .requestMatchers("/open").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .build();
