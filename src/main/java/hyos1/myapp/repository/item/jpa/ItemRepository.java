@@ -19,4 +19,7 @@ public interface ItemRepository {
     List<Item> findAll(ItemSearchCond cond);
 
     void deleteItem(Item item);
+
+    // 중복 아이템 여부 확인
+    boolean existsByName(String name);
 }

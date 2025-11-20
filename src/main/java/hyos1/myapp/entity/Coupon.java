@@ -1,5 +1,8 @@
 package hyos1.myapp.entity;
 
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.ServerException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -49,7 +52,7 @@ public class Coupon extends BaseTimeEntity {
     public static Coupon createCoupon(String name, int discountAmount, int quantity, int availableCount, LocalDateTime startDate, LocalDateTime expiredDate) {
         // 만료일이 시작일보다 빠르면 오류
         if (expiredDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("시작일은 만료일보다 전이여야 합니다.");
+            throw new ClientException(ErrorCode.COUPON_DATE_INVALID);
         }
         return new Coupon(name, discountAmount, quantity, availableCount, startDate, expiredDate);
     }
@@ -64,7 +67,7 @@ public class Coupon extends BaseTimeEntity {
     // 발급 시 수량 감소
     public void decreaseQuantity() {
         if (this.quantity <= 0) {
-            throw new IllegalStateException("쿠폰 수량이 모두 소진되었습니다.");
+            throw new ServerException(ErrorCode.COUPON_SOLD_OUT);
         }
         this.quantity -= 1;
     }
@@ -76,6 +79,9 @@ public class Coupon extends BaseTimeEntity {
 
     //쿠폰 수정
     public void updateCoupon(int availableCount, int quantity) {
+        if (availableCount < 0 || quantity < 0) {
+            throw new ClientException(ErrorCode.COUPON_COUNT_INVALID);
+        }
         this.availableCount = availableCount;
         this.quantity = quantity;
     }

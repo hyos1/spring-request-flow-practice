@@ -22,6 +22,9 @@ public enum ErrorCode {
     // 쿠폰 관련
     COUPON_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 존재하는 쿠폰 이름입니다."),
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 쿠폰입니다."),
+    COUPON_DATE_INVALID(HttpStatus.BAD_REQUEST, "만료일은 시작일 이후여야 합니다."),
+    COUPON_SOLD_OUT(HttpStatus.BAD_REQUEST, "쿠폰 수량이 모두 소진되었습니다."),
+    COUPON_COUNT_INVALID(HttpStatus.BAD_REQUEST, "수량과 1인당 사용 횟수는 음수일 수 없습니다."),
 
     // 아이템 관련
     ITEM_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 존재하는 아이템입니다."),

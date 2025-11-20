@@ -1,5 +1,7 @@
 package hyos1.myapp.service;
 
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.request.ItemCreateRequest;
 import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.dto.response.ItemResponse;
@@ -25,6 +27,9 @@ public class ItemService {
      */
     @Transactional
     public ItemResponse save(ItemCreateRequest request) {
+        if (itemRepository.existsByName(request.getName())) {
+            throw new ClientException(ErrorCode.ITEM_ALREADY_EXISTS);
+        }
         Item savedItem = itemRepository.save(Item.createItem(request.getName(), request.getPrice(), request.getQuantity()));
         return ItemResponse.fromEntity(savedItem);
     }
@@ -44,7 +49,7 @@ public class ItemService {
      */
     public ItemResponse findById(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+                () -> new ClientException(ErrorCode.ITEM_NOT_FOUND));
         return ItemResponse.fromEntity(item);
     }
 
@@ -54,7 +59,7 @@ public class ItemService {
     @Transactional
     public ItemResponse updateItem(Long itemId, ItemUpdateRequest request) {
         Item item = itemRepository.findById(itemId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 아이템입니다."));
+                () -> new ClientException(ErrorCode.ITEM_NOT_FOUND));
         item.updatePriceAndStock(request.getPrice(), request.getStock());
         return ItemResponse.fromEntity(item);
     }
@@ -65,7 +70,7 @@ public class ItemService {
     @Transactional
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(
-                () -> new IllegalArgumentException("삭제할 아이템이 존재하지 않습니다. id = " + itemId));
+                () -> new ClientException(ErrorCode.ITEM_DELETE_NOT_FOUND));
         itemRepository.deleteItem(item);
     }
 }

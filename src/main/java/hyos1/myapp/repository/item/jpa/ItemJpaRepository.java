@@ -82,4 +82,13 @@ public class ItemJpaRepository implements ItemRepository {
     public void deleteItem(Item item) {
         em.remove(item);
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        Long count = em.createQuery("select count(i) from Item i " +
+                        "where i.name = :name", Long.class)
+                .setParameter("name", name)
+                .getSingleResult();
+        return count > 0;
+    }
 }

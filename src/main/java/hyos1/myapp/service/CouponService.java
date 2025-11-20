@@ -1,5 +1,7 @@
 package hyos1.myapp.service;
 
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.request.CouponCreateRequest;
 import hyos1.myapp.dto.request.CouponUpdateRequest;
 import hyos1.myapp.dto.response.CouponResponse;
@@ -24,7 +26,7 @@ public class CouponService {
     @Transactional
     public CouponResponse createCoupon(CouponCreateRequest request) {
         if (couponRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("이미 존재하는 쿠폰 이름입니다.");
+            throw new ClientException(ErrorCode.COUPON_ALREADY_EXISTS);
         }
 
         Coupon coupon = Coupon.createCoupon(
@@ -43,7 +45,7 @@ public class CouponService {
     // 쿠폰 단건 조회
     public CouponResponse findById(Long couponId) {
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+                .orElseThrow(() -> new ClientException(ErrorCode.COUPON_NOT_FOUND));
 
         return CouponResponse.fromEntity(coupon);
     }
@@ -60,7 +62,7 @@ public class CouponService {
     @Transactional
     public CouponResponse updateCoupon(Long couponId, CouponUpdateRequest request) {
         Coupon coupon = couponRepository.findByIdWithLock(couponId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
+                .orElseThrow(() -> new ClientException(ErrorCode.COUPON_NOT_FOUND));
 
         coupon.updateCoupon(request.getAvailableCount(), request.getQuantity());
 
