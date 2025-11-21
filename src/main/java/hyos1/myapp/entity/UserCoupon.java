@@ -1,6 +1,8 @@
 package hyos1.myapp.entity;
 
 import hyos1.myapp.common.CouponStatus;
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,7 +73,7 @@ public class UserCoupon extends BaseTimeEntity {
     // 사용 가능 횟수 검증
     public void checkAvailable() {
         if (this.availableCount <= 0) {
-            throw new IllegalStateException("쿠폰 사용 가능 횟수를 모두 소진했습니다.");
+            throw new ClientException(ErrorCode.COUPON_USAGE_EXHAUSTED);
         }
     }
 
@@ -79,14 +81,14 @@ public class UserCoupon extends BaseTimeEntity {
     public void checkNotExpired(LocalDateTime now) {
         if (this.expiredAt.isBefore(now)) {
             this.couponStatus = CouponStatus.EXPIRED;
-            throw new IllegalStateException("만료된 쿠폰입니다.");
+            throw new ClientException(ErrorCode.COUPON_EXPIRED);
         }
     }
 
     // 본인 쿠폰인지 확인
     public void checkOwner(Long userId) {
         if (!userId.equals(this.getUser().getId())) {
-            throw new IllegalStateException("본인의 쿠폰만 사용할 수 있습니다.");
+            throw new ClientException(ErrorCode.COUPON_NOT_OWNER);
         }
     }
 }

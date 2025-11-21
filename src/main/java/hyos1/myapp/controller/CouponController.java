@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * SecurityConfig에 ADMIN만 접근 가능하도록 설정함
- */
 @RestController
 @RequestMapping("/coupons")
 @RequiredArgsConstructor
@@ -23,7 +20,7 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    // 쿠폰 생성
+    // 쿠폰 생성 ✓
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<CouponResponse> createCoupon(@Valid @RequestBody CouponCreateRequest request) {
@@ -31,19 +28,19 @@ public class CouponController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // 단일 쿠폰 조회
+    // 단일 쿠폰 조회 ✓
     @GetMapping("/{couponId}")
     public ResponseEntity<CouponResponse> findById(@PathVariable Long couponId) {
         return ResponseEntity.ok(couponService.findById(couponId));
     }
 
-    // 전체 쿠폰 조회
+    // 전체 쿠폰 조회 ✓
     @GetMapping
     public ResponseEntity<List<CouponResponse>> findAll() {
         return ResponseEntity.ok(couponService.findAll());
     }
 
-    // 쿠폰 수정
+    // 쿠폰 수정 ✓
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{couponId}")
     public ResponseEntity<CouponResponse> updateCoupon(

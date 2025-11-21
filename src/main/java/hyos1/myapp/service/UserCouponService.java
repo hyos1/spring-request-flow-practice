@@ -1,6 +1,9 @@
 package hyos1.myapp.service;
 
 import hyos1.myapp.common.CouponStatus;
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.ServerException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.response.UserCouponResponse;
 import hyos1.myapp.entity.Coupon;
 import hyos1.myapp.entity.User;
@@ -33,25 +36,25 @@ public class UserCouponService {
 
         //락 없이 유저 먼저 조회
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+                () -> new ClientException(ErrorCode.USER_NOT_FOUND));
 
         //쿠폰 조회 + PESSIMISTIC_WRITE 락
         Coupon coupon = couponRepository.findByIdWithLock(couponId).orElseThrow(
-                () -> new IllegalArgumentException("쿠폰을 찾을 수 없습니다."));
+                () -> new ClientException(ErrorCode.COUPON_NOT_FOUND));
+
+        //중복 발급 검증
+        if (userCouponRepository.existsByUserIdAndCouponId(userId, couponId)) {
+            throw new ClientException(ErrorCode.COUPON_ALREADY_ISSUED);
+        }
 
         //발급 가능 기간 검증
         if (!coupon.isAvailableNow(LocalDateTime.now())) {
-            throw new IllegalStateException("발급 가능한 날짜가 아닙니다.");
+            throw new ClientException(ErrorCode.COUPON_NOT_ISSUABLE_NOW);
         }
 
         //발급 가능한 수량이 있는지 검증
         if (!coupon.canIssue()) {
-            throw new IllegalStateException("쿠폰 수량이 모두 소진되었습니다.");
-        }
-
-        //중복 발급 검증
-        if (userCouponRepository.existsByUserIdAndCouponId(userId, couponId)) {
-            throw new IllegalStateException("이미 발급된 쿠폰입니다.");
+            throw new ServerException(ErrorCode.COUPON_QUANTITY_EMPTY);
         }
 
         //수량 감소
@@ -75,7 +78,7 @@ public class UserCouponService {
      */
     public UserCouponResponse findByUserIdAndCouponId(Long userId, Long couponId) {
         UserCoupon userCoupon = userCouponRepository.findByUserIdAndCouponId(userId, couponId).orElseThrow(
-                () -> new IllegalArgumentException("발급받지 않은 쿠폰입니다.")
+                () -> new ClientException(ErrorCode.USER_COUPON_NOT_FOUND)
         );
         return UserCouponResponse.fromEntity(userCoupon);
     }
@@ -95,7 +98,7 @@ public class UserCouponService {
      */
     public UserCouponResponse findById(Long userCouponId) {
         UserCoupon userCoupon = userCouponRepository.findById(userCouponId).orElseThrow(
-                () -> new IllegalArgumentException("사용자 쿠폰을 찾을 수 없습니다."));
+                () -> new ClientException(ErrorCode.USER_COUPON_NOT_FOUND_ADMIN));
         return UserCouponResponse.fromEntity(userCoupon);
     }
 

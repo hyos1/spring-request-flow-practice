@@ -21,14 +21,14 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // 회원가입
+    // 회원가입 ✓
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequest request) {
         authService.signup(request);
         return ResponseEntity.ok("회원가입 성공");
     }
 
-    // 로그인 -> JWT 발급
+    // 로그인 -> JWT 발급 ✓
     @PostMapping("/login")
     public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest request) {
         String bearerToken = authService.login(request);

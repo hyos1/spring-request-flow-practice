@@ -19,7 +19,7 @@ public class UserCouponController {
 
     private final UserCouponService userCouponService;
 
-    // [사용자] 쿠폰 발급 요청
+    // [사용자] 쿠폰 발급 요청 ✓
     @PostMapping("/{couponId}")
     public ResponseEntity<UserCouponResponse> issueCoupon(
             @PathVariable Long couponId,
@@ -28,7 +28,7 @@ public class UserCouponController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // [사용자] 본인 쿠폰 단건 조회
+    // [사용자] 본인 쿠폰 단건 조회 ✓
     @GetMapping("/{couponId}")
     public ResponseEntity<UserCouponResponse> findByUserIdAndCouponId(
             @PathVariable Long couponId,
@@ -37,13 +37,13 @@ public class UserCouponController {
         return ResponseEntity.ok(result);
     }
 
-    // [사용자] 본인 쿠폰 전체 조회
+    // [사용자] 본인 쿠폰 전체 조회 ✓
     @GetMapping
     public ResponseEntity<List<UserCouponResponse>> findAllByUser(@AuthenticationPrincipal AuthUser authUser) {
         return ResponseEntity.ok(userCouponService.findAllByUserId(authUser.getUserId()));
     }
 
-    // [관리자] 사용자 쿠폰 단건 조회
+    // [관리자] 사용자 쿠폰 단건 조회 ✓
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/{userCouponId}")
     public ResponseEntity<UserCouponResponse> findById(@PathVariable Long userCouponId) {
@@ -51,7 +51,7 @@ public class UserCouponController {
         return ResponseEntity.ok(response);
     }
 
-    // [관리자] 전체 사용자 쿠폰 목록 조회
+    // [관리자] 전체 사용자 쿠폰 목록 조회 ✓
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
     public ResponseEntity<List<UserCouponResponse>> findAll() {
