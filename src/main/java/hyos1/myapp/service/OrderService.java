@@ -1,6 +1,8 @@
 package hyos1.myapp.service;
 
 import hyos1.myapp.common.OrderStatus;
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.request.OrderCreateRequest;
 import hyos1.myapp.dto.response.OrderResponse;
 import hyos1.myapp.entity.*;
@@ -35,7 +37,7 @@ public class OrderService {
 
         // 1. 사용자 조회
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+                () -> new ClientException(ErrorCode.USER_NOT_FOUND));
 
         List<OrderItem> orderItems = new ArrayList<>();
 
@@ -43,7 +45,7 @@ public class OrderService {
         for (OrderItemRequest orderItemRequest : request.getItems()) {
             // 동시에 주문시 재고 문제 생길 수 있으므로 LOCK
             Item item = itemRepository.findByIdWithLock(orderItemRequest.getItemId()).orElseThrow(
-                    () -> new IllegalArgumentException("상품을 찾을 수 없습니다.")
+                    () -> new ClientException(ErrorCode.ITEM_NOT_FOUND)
             );
 
             OrderItem orderItem = OrderItem.createOrderItem(item, orderItemRequest.getQuantity());
@@ -56,12 +58,12 @@ public class OrderService {
 
         // 3. 쿠폰 사용 여부 처리
         UserCoupon userCoupon = null;
-        if (request.getUserCouponId() != null) {
-            userCoupon = userCouponRepository.findById(request.getUserCouponId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 쿠폰이 존재하지 않습니다."));
+        if (request.getCouponId() != null) {
+            // 유저ID, 쿠폰ID를 사용한 조회
+            userCoupon = userCouponRepository.findByUserIdAndCouponId(userId, request.getCouponId())
+                    .orElseThrow(() -> new ClientException(ErrorCode.COUPON_NOT_FOUND));
 
             // 쿠폰 검증 (명시적으로 어떤 검증을 했는지 보여주기 위함)
-            userCoupon.checkOwner(userId);
             userCoupon.checkAvailable();
             userCoupon.checkNotExpired(LocalDateTime.now());
 
@@ -80,7 +82,7 @@ public class OrderService {
     // [사용자] 주문 단건 조회(OrderItem-> BatchSize 사용)
     public OrderResponse findUserOrderById(Long userId, Long orderId) {
         Order order = orderRepository.findByUserIdAndOrderId(userId, orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ClientException(ErrorCode.ORDER_NOT_FOUND));
 
         return OrderResponse.fromEntity(order);
     }
@@ -97,7 +99,7 @@ public class OrderService {
     // [관리자]주문 단건 조회
     public OrderResponse findOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+                () -> new ClientException(ErrorCode.ORDER_NOT_FOUND));
         return OrderResponse.fromEntity(order);
     }
 
@@ -112,9 +114,9 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Long userId, Long orderId) {
         Order order = orderRepository.findByUserIdAndOrderId(userId, orderId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+                () -> new ClientException(ErrorCode.ORDER_NOT_FOUND));
         if (order.getOrderStatus() == OrderStatus.CANCEL) {
-            throw new IllegalStateException("이미 취소된 주문입니다.");
+            throw new ClientException(ErrorCode.ORDER_ALREADY_CANCELED);
         }
 
         order.cancelOrder();

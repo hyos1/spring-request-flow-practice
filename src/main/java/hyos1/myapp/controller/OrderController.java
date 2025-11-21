@@ -39,7 +39,7 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-    // [사용자] 본인 주문 전체 조회
+    // [사용자] 본인 주문 전체 조회 ✓
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getMyOrders(@AuthenticationPrincipal AuthUser authUser) {
         List<OrderResponse> userOrders = orderService.findUserOrders(authUser.getUserId());

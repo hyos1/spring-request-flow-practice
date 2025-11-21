@@ -17,7 +17,8 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity  // Spring Security 활성화
-@EnableMethodSecurity(securedEnabled = true)  // @Secured 활성화
+@EnableMethodSecurity(
+        securedEnabled = true)  // @Secured 활성화
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -46,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
                         .requestMatchers("/auth/refresh").authenticated() // 토큰 재발급은 JWT 필요 (추가 예정)
                         .requestMatchers("/user_coupons", "/user_coupons/**").authenticated()
+//                        .requestMatchers("/orders","/orders/**").hasAuthority(UserRole.Authority.ADMIN)
                         .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
                         .requestMatchers("/open").permitAll()
                         .requestMatchers("/error").permitAll()

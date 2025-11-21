@@ -1,5 +1,7 @@
 package hyos1.myapp.entity;
 
+import hyos1.myapp.common.exception.ServerException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,7 +46,7 @@ public class Item extends BaseTimeEntity{
     // 검증 + 재고 감소
     public void decreaseStock(int quantity) {
         if (this.stock - quantity < 0) {
-            throw new IllegalStateException("상품 재고가 부족합니다.");
+            throw new ServerException(ErrorCode.ITEM_STOCK_EMPTY);
         }
         this.stock -= quantity;
     }

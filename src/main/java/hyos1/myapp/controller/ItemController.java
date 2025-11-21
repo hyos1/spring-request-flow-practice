@@ -21,21 +21,21 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    // [사용자] 상품 단건 조회
+    // [사용자] 상품 단건 조회 ✓
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemResponse> findById(@PathVariable Long itemId) {
         ItemResponse item = itemService.findById(itemId);
         return ResponseEntity.ok(item);
     }
 
-    // [사용자] 상품 전체 조회
+    // [사용자] 상품 전체 조회 ✓
     @GetMapping
     public ResponseEntity<List<ItemResponse>> findAll(@ModelAttribute ItemSearchCond cond) {
         List<ItemResponse> items = itemService.findAll(cond);
         return ResponseEntity.ok(items);
     }
 
-    // [관리자] 상품 등록
+    // [관리자] 상품 등록 ✓
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ItemResponse> create(@Valid @RequestBody ItemCreateRequest request) {
@@ -43,7 +43,7 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdItem);
     }
 
-    // [관리자] 상품 수정
+    // [관리자] 상품 수정 ✓
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemResponse> update(

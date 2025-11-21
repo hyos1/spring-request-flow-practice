@@ -2,6 +2,7 @@ package hyos1.myapp.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyos1.myapp.common.UserRole;
+import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.entity.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -68,7 +69,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // SecurityContext에 인증 정보가 없으면 설정(이미 인증된 경우 중복 설정 방지)
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                setAuthentication(claims);
+                try {
+                    setAuthentication(claims);
+                } catch (ClientException e) {
+                    log.error("UserRole 검증 ", e);
+                    sendErrorResponse(response, e.getErrorCode().getHttpStatus(), e.getMessage());
+                }
             }
             return true; // 검증 성공
         } catch (ExpiredJwtException e) {
