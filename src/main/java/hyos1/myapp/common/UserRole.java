@@ -1,5 +1,7 @@
 package hyos1.myapp.common;
 
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +20,7 @@ public enum UserRole {
         return Arrays.stream(UserRole.values())
                 .filter(r -> r.name().equalsIgnoreCase(role))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("유효하지 않은 UserRole"));
+                .orElseThrow(() -> new ClientException(ErrorCode.INVALID_USER_ROLE));
     }
 
     public static class Authority {

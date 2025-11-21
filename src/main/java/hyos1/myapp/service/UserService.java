@@ -1,5 +1,7 @@
 package hyos1.myapp.service;
 
+import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.request.SignUpRequest;
 import hyos1.myapp.dto.request.UserUpdateRequest;
 import hyos1.myapp.dto.response.UserResponse;
@@ -27,7 +29,7 @@ public class UserService {
      */
     public UserResponse findById(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다"));
+                () -> new ClientException(ErrorCode.USER_NOT_FOUND));
 
         return UserResponse.fromEntity(user);
     }
@@ -47,26 +49,26 @@ public class UserService {
     @Transactional
     public UserResponse updateUser(Long authUserId, Long userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                () -> new ClientException(ErrorCode.USER_NOT_FOUND));
 
         // 아이디로 본인 확인
         if (!authUserId.equals(userId)) {
-            throw new AccessDeniedException("본인 정보만 수정 가능합니다.");
+            throw new ClientException(ErrorCode.USER_NOT_OWNER);
         }
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호를 잘못 입력하였습니다.");
+            throw new ClientException(ErrorCode.INVALID_PASSWORD);
         }
 
         // 새 비밀번호가 기존 비밀번호와 같은지 확인
         if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
-            throw new IllegalStateException("같은 비밀번호로는 변경할 수 없습니다.");
+            throw new ClientException(ErrorCode.PASSWORD_SAME_AS_OLD);
         }
 
         // 같은 이메일 & 중복 이메일 확인
-        if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용중인 이메일입니다.");
+        if (user.getEmail().equals(request.getEmail()) || userRepository.existsByEmail(request.getEmail())) {
+            throw new ClientException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
         user.updateEmailPassword(request.getEmail(), passwordEncoder.encode(request.getNewPassword()));
@@ -79,7 +81,7 @@ public class UserService {
     @Transactional
     public void deleteUser(Long authUserId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                () -> new ClientException(ErrorCode.USER_NOT_FOUND));
 
         // 아이디로 본인 확인
         if (!authUserId.equals(userId)) {
@@ -87,7 +89,7 @@ public class UserService {
         }
 
         if (user.isDeleted()) {
-            throw new IllegalStateException("이미 탈퇴한 회원입니다.");
+            throw new ClientException(ErrorCode.USER_ALREADY_DELETED);
         }
         user.setDeleted(true);
     }
