@@ -6,6 +6,7 @@ import hyos1.myapp.dto.request.SignUpRequest;
 import hyos1.myapp.dto.request.UserUpdateRequest;
 import hyos1.myapp.dto.response.UserResponse;
 import hyos1.myapp.entity.User;
+import hyos1.myapp.repository.user.datajpa.UserDataRepository;
 import hyos1.myapp.repository.user.jpa.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -21,7 +22,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService {
 
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
+    private final UserDataRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
