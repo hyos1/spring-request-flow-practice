@@ -43,6 +43,7 @@ public class CouponJpaRepository implements CouponRepository {
         return em.createQuery("select c from Coupon c", Coupon.class).getResultList();
     }
 
+    // 쿠폰 이름이 있는지 확인
     @Override
     public boolean existsByName(String name) {
         Long count = em.createQuery("select count(*) from Coupon c where c.name = :name", Long.class)
