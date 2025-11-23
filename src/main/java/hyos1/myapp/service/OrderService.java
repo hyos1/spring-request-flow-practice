@@ -6,9 +6,15 @@ import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.request.OrderCreateRequest;
 import hyos1.myapp.dto.response.OrderResponse;
 import hyos1.myapp.entity.*;
+import hyos1.myapp.repository.item.datajpa.ItemDataRepository;
 import hyos1.myapp.repository.item.jpa.ItemRepository;
+import hyos1.myapp.repository.order.datajpa.OrderDataRepository;
+import hyos1.myapp.repository.order.jpa.OrderJpaRepository;
 import hyos1.myapp.repository.order.jpa.OrderRepository;
+import hyos1.myapp.repository.user.datajpa.UserDataRepository;
+import hyos1.myapp.repository.user.jpa.UserJpaRepository;
 import hyos1.myapp.repository.user.jpa.UserRepository;
+import hyos1.myapp.repository.usercoupon.datajpa.UserCouponDataRepository;
 import hyos1.myapp.repository.usercoupon.jpa.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,10 +32,16 @@ import static hyos1.myapp.dto.request.OrderCreateRequest.*;
 @Transactional(readOnly = true)
 public class OrderService {
 
-    private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
-    private final UserCouponRepository userCouponRepository;
+    // 순수 jpa
+//    private final OrderJpaRepository orderRepository;
+//    private final UserJpaRepository userRepository;
+//    private final ItemRepository itemRepository;
+//    private final UserCouponRepository userCouponRepository;
+    // data jpa
+    private final OrderDataRepository orderRepository;
+    private final UserDataRepository userRepository;
+    private final ItemDataRepository itemRepository;
+    private final UserCouponDataRepository userCouponRepository;
 
     // [사용자] 주문 생성
     @Transactional
@@ -98,7 +110,7 @@ public class OrderService {
 
     // [관리자]주문 단건 조회
     public OrderResponse findOrderById(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(
+        Order order = orderRepository.findWithUserAndCouponById(orderId).orElseThrow(
                 () -> new ClientException(ErrorCode.ORDER_NOT_FOUND));
         return OrderResponse.fromEntity(order);
     }

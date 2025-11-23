@@ -54,7 +54,7 @@ public class OrderJpaRepository implements OrderRepository {
 
     // [관리자] 주문 단건 조회
     @Override
-    public Optional<Order> findById(Long orderId) {
+    public Optional<Order> findWithUserAndCouponById(Long orderId) {
         try {
             Order order = em.createQuery("select o from Order o " +
                             "join fetch o.user u " +

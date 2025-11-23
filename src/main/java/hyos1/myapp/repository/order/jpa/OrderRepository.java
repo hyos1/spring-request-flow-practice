@@ -17,7 +17,7 @@ public interface OrderRepository {
     List<Order> findByUserId(Long userId);
 
     // [관리자] 주문 단건 조회
-    Optional<Order> findById(Long orderId);
+    Optional<Order> findWithUserAndCouponById(Long orderId);
 
     // [관리자]
     List<Order> findAll();
