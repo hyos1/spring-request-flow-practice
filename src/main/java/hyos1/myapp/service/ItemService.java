@@ -6,7 +6,9 @@ import hyos1.myapp.dto.request.ItemCreateRequest;
 import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.dto.response.ItemResponse;
 import hyos1.myapp.entity.Item;
+import hyos1.myapp.repository.item.datajpa.ItemDataRepository;
 import hyos1.myapp.repository.item.jdbc.ItemSearchCond;
+import hyos1.myapp.repository.item.jpa.ItemJpaRepository;
 import hyos1.myapp.repository.item.jpa.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ItemService {
 
-    private final ItemRepository itemRepository;
+    private final ItemJpaRepository itemRepository; // 순수 jpa
+//    private final ItemDataRepository itemRepository; // data jpa
 
     /**
      * 아이템 생성
