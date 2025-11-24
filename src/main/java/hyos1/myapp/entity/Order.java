@@ -17,34 +17,43 @@ import static hyos1.myapp.common.OrderStatus.ORDER;
 @Table(name = "orders")
 @Getter @Setter
 @NoArgsConstructor
-@ToString @EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
 
     @Column(nullable = false)
+    @ToString.Include
     private int finalPrice; // 최종 금액
 
     @Column(nullable = false)
+    @ToString.Include
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     @CreatedDate
+    @ToString.Include
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_coupon_id", nullable = true)
+    @ToString.Exclude
     private UserCoupon userCoupon;
 
     //주문의 상세정보는 자주 필요하므로 양방향으로 결정
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();
 
     // ===== 주문 생성 =====

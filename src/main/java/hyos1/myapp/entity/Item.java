@@ -9,18 +9,23 @@ import lombok.*;
 @Table(name = "items")
 @Getter @Setter
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Item extends BaseTimeEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
+    @ToString.Include
     private String name;
+
     @Column(nullable = false)
     private int price;
+
     @Column(nullable = false)
     private int stock;
 

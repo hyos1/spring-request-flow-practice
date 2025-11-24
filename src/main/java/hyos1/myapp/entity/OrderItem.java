@@ -9,20 +9,27 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "order") //순환참조 문제생김
-@EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false)
+    @ToString.Include
     private String name;
+
     @Column(nullable = false)
+    @ToString.Include
     private int orderPrice; // 주문 당시 상품 1개의 가격
+
     @Column(nullable = false)
+    @ToString.Include
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)

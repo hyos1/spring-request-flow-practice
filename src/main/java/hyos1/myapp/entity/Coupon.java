@@ -12,30 +12,41 @@ import java.time.LocalDateTime;
 @Table(name = "coupons")
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Coupon extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_id")
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @ToString.Include
     private String name;
+
     //할인금액
     @Column(nullable = false)
+    @ToString.Include
     private int discountAmount;
+
     //생성할 수량
     @Column(nullable = false)
+    @ToString.Include
     private int quantity;
+
     //1인당 사용 가능 횟수
     @Column(nullable = false)
+    @ToString.Include
     private int availableCount;
+
     //쿠폰 사용 시작일 -> todo 스케쥴러 사용하기
     @Column(nullable = false)
     private LocalDateTime startDate;
+
     //쿠폰 만료일
     @Column(nullable = false)
     private LocalDateTime expiredDate;
