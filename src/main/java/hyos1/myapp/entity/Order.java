@@ -43,17 +43,14 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_coupon_id", nullable = true)
-    @ToString.Exclude
     private UserCoupon userCoupon;
 
     //주문의 상세정보는 자주 필요하므로 양방향으로 결정
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     private List<OrderItem> orderItems = new ArrayList<>();
 
     // ===== 주문 생성 =====

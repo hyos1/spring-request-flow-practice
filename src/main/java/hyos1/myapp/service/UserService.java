@@ -26,9 +26,7 @@ public class UserService {
     private final UserDataRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * 단일 회원 조회
-     */
+    // 본인 조회
     public UserResponse findById(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ClientException(ErrorCode.USER_NOT_FOUND));
@@ -36,18 +34,14 @@ public class UserService {
         return UserResponse.fromEntity(user);
     }
 
-    /**
-     * [관리자용]전체 회원 조회
-     */
+    // 회원 전체 조회
     public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream().map(u -> UserResponse.fromEntity(u))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 회원 수정
-     */
+    // 회원 수정
     @Transactional
     public UserResponse updateUser(Long authUserId, Long userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
@@ -77,9 +71,7 @@ public class UserService {
         return UserResponse.fromEntity(user);
     }
 
-    /**
-     * 회원 탈퇴(Soft Delete)
-     */
+    // 회원 탈퇴
     @Transactional
     public void deleteUser(Long authUserId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(

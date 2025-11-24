@@ -23,9 +23,7 @@ public class ItemService {
     private final ItemJpaRepository itemRepository; // 순수 jpa
 //    private final ItemDataRepository itemRepository; // data jpa
 
-    /**
-     * 아이템 생성
-     */
+    // [관리자] 상품 등록
     @Transactional
     public ItemResponse save(ItemCreateRequest request) {
         if (itemRepository.existsByName(request.getName())) {
@@ -35,9 +33,14 @@ public class ItemService {
         return ItemResponse.fromEntity(savedItem);
     }
 
-    /**
-     * 전체 아이템 조회
-     */
+    // 상품 단건 조회
+    public ItemResponse findById(Long itemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(
+                () -> new ClientException(ErrorCode.ITEM_NOT_FOUND));
+        return ItemResponse.fromEntity(item);
+    }
+
+    // 상품 전체 조회
     public List<ItemResponse> findAll(ItemSearchCond cond) {
         List<Item> items = itemRepository.findAll(cond);
         return items.stream()
@@ -45,18 +48,7 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 단건 아이템 조회
-     */
-    public ItemResponse findById(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(
-                () -> new ClientException(ErrorCode.ITEM_NOT_FOUND));
-        return ItemResponse.fromEntity(item);
-    }
-
-    /**
-     * 아이템 수정
-     */
+    // [관리자] 상품 수정
     @Transactional
     public ItemResponse updateItem(Long itemId, ItemUpdateRequest request) {
         Item item = itemRepository.findById(itemId).orElseThrow(
@@ -65,9 +57,7 @@ public class ItemService {
         return ItemResponse.fromEntity(item);
     }
 
-    /**
-     * 아이템 삭제
-     */
+    // [관리자] 상품 삭제
     @Transactional
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(

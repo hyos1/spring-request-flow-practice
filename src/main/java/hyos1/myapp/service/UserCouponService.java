@@ -34,9 +34,7 @@ public class UserCouponService {
     private final CouponDataRepository couponRepository;
 
 
-    /**
-     * [사용자]쿠폰 발급
-     */
+    // [사용자] 쿠폰 발급
     @Transactional
     public UserCouponResponse issueCoupon(Long userId, Long couponId) {
 
@@ -67,21 +65,13 @@ public class UserCouponService {
         coupon.decreaseQuantity();
 
         //사용자 쿠폰 생성
-        UserCoupon userCoupon = UserCoupon.createUserCoupon(
-                user,
-                coupon,
-                coupon.getAvailableCount(),
-                CouponStatus.UNUSED,
-                coupon.getExpiredDate()
-        );
+        UserCoupon userCoupon = UserCoupon.createUserCoupon(user, coupon);
         userCouponRepository.save(userCoupon);
 
         return UserCouponResponse.fromEntity(userCoupon);
     }
 
-    /**
-     * 사용자의 쿠폰 단건 조회
-     */
+    // [사용자] 본인 쿠폰 단건 조회
     public UserCouponResponse findByUserIdAndCouponId(Long userId, Long couponId) {
         UserCoupon userCoupon = userCouponRepository.findByUserIdAndCouponId(userId, couponId).orElseThrow(
                 () -> new ClientException(ErrorCode.USER_COUPON_NOT_FOUND)
@@ -89,9 +79,7 @@ public class UserCouponService {
         return UserCouponResponse.fromEntity(userCoupon);
     }
 
-    /**
-     * 사용자의 쿠폰 전체 조회
-     */
+    // [사용자] 본인 쿠폰 전체 조회
     public List<UserCouponResponse> findAllByUserId(Long userId) {
         List<UserCoupon> result = userCouponRepository.findAllByUserId(userId);
         return result.stream()
@@ -99,18 +87,14 @@ public class UserCouponService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * [관리자]UserCoupon 단건 조회
-     */
+    // [관리자] 사용자 쿠폰 단건 조회
     public UserCouponResponse findById(Long userCouponId) {
         UserCoupon userCoupon = userCouponRepository.findById(userCouponId).orElseThrow(
                 () -> new ClientException(ErrorCode.USER_COUPON_NOT_FOUND_ADMIN));
         return UserCouponResponse.fromEntity(userCoupon);
     }
 
-    /**
-     * [관리자]전체 사용자 쿠폰 목록 조회
-     */
+    // [관리자] 전체 사용자 쿠폰 목록 조회
     public List<UserCouponResponse> findAll() {
         List<UserCoupon> result = userCouponRepository.findAll();
         return result.stream().map(uc -> UserCouponResponse.fromEntity(uc))

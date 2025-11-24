@@ -43,12 +43,10 @@ public class User extends BaseTimeEntity {
     //회원이 주문 목록 조회 많이 할 것 같아서 양방향으로 결정
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    @ToString.Exclude
     private List<Order> orders = new ArrayList<>();
 
     //회원이 가진 쿠폰 목록 조회가 많을 것 같아서 양방향으로 결정
     @OneToMany(mappedBy = "user")
-    @ToString.Exclude
     private List<UserCoupon> userCoupons = new ArrayList<>();
 
     private User(String name, String email, String password, UserRole userRole) {

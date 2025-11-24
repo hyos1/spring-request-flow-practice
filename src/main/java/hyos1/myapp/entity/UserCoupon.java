@@ -48,8 +48,8 @@ public class UserCoupon extends BaseTimeEntity {
         this.expiredAt = expiredAt;
     }
 
-    public static UserCoupon createUserCoupon(User user, Coupon coupon, int availableCount, CouponStatus couponStatus, LocalDateTime expiredAt) {
-        UserCoupon userCoupon = new UserCoupon(availableCount, couponStatus, expiredAt);
+    public static UserCoupon createUserCoupon(User user, Coupon coupon) {
+        UserCoupon userCoupon = new UserCoupon(coupon.getAvailableCount(), CouponStatus.UNUSED, coupon.getExpiredDate());
         user.addUserCoupon(userCoupon);
         userCoupon.setCoupon(coupon);
         return userCoupon;
