@@ -1,9 +1,9 @@
 package hyos1.myapp.common.handler;
 
 import hyos1.myapp.common.exception.ClientException;
+import hyos1.myapp.common.exception.ErrorResponse;
 import hyos1.myapp.common.exception.ServerException;
 import hyos1.myapp.common.exception.constant.ErrorCode;
-import hyos1.myapp.common.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

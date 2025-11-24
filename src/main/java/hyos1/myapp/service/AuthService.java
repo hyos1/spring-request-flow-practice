@@ -1,18 +1,15 @@
 package hyos1.myapp.service;
 
 import hyos1.myapp.common.exception.ClientException;
-import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.config.JwtUtil;
 import hyos1.myapp.dto.request.LoginRequest;
 import hyos1.myapp.dto.request.SignUpRequest;
 import hyos1.myapp.entity.User;
-import hyos1.myapp.repository.user.jpa.UserRepository;
+import hyos1.myapp.repository.user.datajpa.UserDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static hyos1.myapp.common.exception.constant.ErrorCode.*;
 
@@ -21,7 +18,8 @@ import static hyos1.myapp.common.exception.constant.ErrorCode.*;
 @Transactional(readOnly = true)
 public class AuthService {
 
-    private final UserRepository userRepository;
+//    private final UserJpaRepository userRepository; // 순수 jpa
+    private final UserDataRepository userRepository; // data jpa
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 

@@ -7,15 +7,9 @@ import hyos1.myapp.dto.request.OrderCreateRequest;
 import hyos1.myapp.dto.response.OrderResponse;
 import hyos1.myapp.entity.*;
 import hyos1.myapp.repository.item.datajpa.ItemDataRepository;
-import hyos1.myapp.repository.item.jpa.ItemRepository;
 import hyos1.myapp.repository.order.datajpa.OrderDataRepository;
-import hyos1.myapp.repository.order.jpa.OrderJpaRepository;
-import hyos1.myapp.repository.order.jpa.OrderRepository;
 import hyos1.myapp.repository.user.datajpa.UserDataRepository;
-import hyos1.myapp.repository.user.jpa.UserJpaRepository;
-import hyos1.myapp.repository.user.jpa.UserRepository;
 import hyos1.myapp.repository.usercoupon.datajpa.UserCouponDataRepository;
-import hyos1.myapp.repository.usercoupon.jpa.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hyos1.myapp.dto.request.OrderCreateRequest.*;
+import static hyos1.myapp.dto.request.OrderCreateRequest.OrderItemRequest;
 
 @Service
 @RequiredArgsConstructor

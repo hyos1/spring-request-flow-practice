@@ -7,12 +7,10 @@ import hyos1.myapp.dto.request.CouponUpdateRequest;
 import hyos1.myapp.dto.response.CouponResponse;
 import hyos1.myapp.entity.Coupon;
 import hyos1.myapp.repository.coupon.datajpa.CouponDataRepository;
-import hyos1.myapp.repository.coupon.jpa.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

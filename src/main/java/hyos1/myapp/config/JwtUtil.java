@@ -20,7 +20,7 @@ import java.util.Date;
 public class JwtUtil {
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 30 * 1 * 1000L; //30초
+    private static final long TOKEN_TIME = 60 * 60 * 1000L; //30초
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -60,9 +60,9 @@ public class JwtUtil {
     //Claims 추출
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(key) // 서명 검증에 사용할 비밀키
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseClaimsJws(token) //토큰 검증 + 파싱
+                .getBody(); // JWT의 body부분 (claims) 추출
     }
 }

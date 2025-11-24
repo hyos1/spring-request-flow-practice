@@ -2,12 +2,10 @@ package hyos1.myapp.service;
 
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.common.exception.constant.ErrorCode;
-import hyos1.myapp.dto.request.SignUpRequest;
 import hyos1.myapp.dto.request.UserUpdateRequest;
 import hyos1.myapp.dto.response.UserResponse;
 import hyos1.myapp.entity.User;
 import hyos1.myapp.repository.user.datajpa.UserDataRepository;
-import hyos1.myapp.repository.user.jpa.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +20,9 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService {
 
+    // 순수 jpa
 //    private final UserRepository userRepository;
+    // data jpa
     private final UserDataRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 

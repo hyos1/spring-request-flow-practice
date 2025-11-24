@@ -2,17 +2,14 @@ package hyos1.myapp.controller;
 
 import hyos1.myapp.dto.request.LoginRequest;
 import hyos1.myapp.dto.request.SignUpRequest;
-import hyos1.myapp.dto.response.UserResponse;
-import hyos1.myapp.entity.User;
 import hyos1.myapp.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor

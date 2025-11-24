@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class ItemUpdateRequest {
 
     @NotNull
-    private String itemName;
-    @NotNull
     @Positive
     private int price;
     @NotNull

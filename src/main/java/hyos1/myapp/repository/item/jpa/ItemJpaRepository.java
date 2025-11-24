@@ -1,6 +1,5 @@
 package hyos1.myapp.repository.item.jpa;
 
-import hyos1.myapp.dto.request.ItemUpdateRequest;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.repository.item.jdbc.ItemSearchCond;
 import jakarta.persistence.EntityManager;

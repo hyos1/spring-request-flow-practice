@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.user.jdbc;
 
-import hyos1.myapp.dto.UserUpdateDto;
+import hyos1.myapp.dto.request.UserUpdateRequestDtoWithJdbc;
 import hyos1.myapp.entity.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -42,7 +42,7 @@ public class UserJdbcRepository {
         return user;
     }
 
-    public void update(Long id, UserUpdateDto dto) {
+    public void update(Long id, UserUpdateRequestDtoWithJdbc dto) {
         String sql = "update users set name = :name, email = :email where user_id = :id";
 //        new BeanPropertySqlParameterSource(dto)
         MapSqlParameterSource param = new MapSqlParameterSource()

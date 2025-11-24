@@ -8,9 +8,9 @@ import hyos1.myapp.dto.response.UserCouponResponse;
 import hyos1.myapp.entity.Coupon;
 import hyos1.myapp.entity.User;
 import hyos1.myapp.entity.UserCoupon;
-import hyos1.myapp.repository.coupon.jpa.CouponRepository;
-import hyos1.myapp.repository.user.jpa.UserRepository;
-import hyos1.myapp.repository.usercoupon.jpa.UserCouponRepository;
+import hyos1.myapp.repository.coupon.datajpa.CouponDataRepository;
+import hyos1.myapp.repository.user.datajpa.UserDataRepository;
+import hyos1.myapp.repository.usercoupon.datajpa.UserCouponDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +24,15 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserCouponService {
 
-    private final UserCouponRepository userCouponRepository;
-    private final UserRepository userRepository;
-    private final CouponRepository couponRepository;
+    // 순수 jpa
+//    private final UserCouponJpaRepository userCouponRepository;
+//    private final UserRepository userRepository;
+//    private final CouponRepository couponRepository;
+    // data jpa
+    private final UserCouponDataRepository userCouponRepository;
+    private final UserDataRepository userRepository;
+    private final CouponDataRepository couponRepository;
+
 
     /**
      * [사용자]쿠폰 발급

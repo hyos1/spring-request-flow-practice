@@ -1,6 +1,5 @@
 package hyos1.myapp.controller;
 
-import hyos1.myapp.dto.request.SignUpRequest;
 import hyos1.myapp.dto.request.UserUpdateRequest;
 import hyos1.myapp.dto.response.UserResponse;
 import hyos1.myapp.entity.AuthUser;
@@ -8,11 +7,8 @@ import hyos1.myapp.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
