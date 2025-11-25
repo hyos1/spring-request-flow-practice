@@ -22,6 +22,7 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,15 +44,18 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
                 .rememberMe(AbstractHttpConfigurer::disable)
 
+                // 토큰이 필요한 기능에 토큰 없이 요청시 응답 메세지 설정
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
-                        .requestMatchers("/auth/refresh").authenticated() // 토큰 재발급은 JWT 필요 (추가 예정)
-                        .requestMatchers("/user_coupons", "/user_coupons/**").authenticated()
+                                .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
+                                .requestMatchers("/auth/refresh").authenticated() // 토큰 재발급은 JWT 필요 (추가 예정)
+                                .requestMatchers("/user_coupons", "/user_coupons/**").authenticated()
 //                        .requestMatchers("/orders","/orders/**").hasAuthority(UserRole.Authority.ADMIN)
-                        .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
-                        .requestMatchers("/open").permitAll()
-                        .requestMatchers("/error").permitAll()
-                        .anyRequest().authenticated()
+//                        .requestMatchers("/test").hasAuthority(UserRole.Authority.ADMIN)
+//                        .requestMatchers("/open").permitAll()
+                                .requestMatchers("/error").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .build();
     }

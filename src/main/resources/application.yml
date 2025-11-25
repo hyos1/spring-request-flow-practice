@@ -12,9 +12,10 @@ spring:
       hibernate:
         #        show_sql: true
         format_sql: true
-        default_batch_fetch_size: 100
+        default_batch_fetch_size: 100 #페이징 처리를 위해 컬렉션은 in 절로 조회
     open-in-view: false
 
+# 콘솔 창 색상 설정
   output:
     ansi:
       enabled: always
@@ -22,8 +23,18 @@ spring:
 logging:
   level:
     org.hibernate.SQL: DEBUG
+#    org.springframework.security: DEBUG
 #    org.hibernate.orm.jdbc.bind: trace
 
 jwt:
   secret:
     key: akjbfiu23bfafnaji3889adskjndskjdsfnalaiweufh
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+    include-exception: true
+    include-message: "always"
+    include-stacktrace: "on_param"
+    include-binding-errors: "on_param"

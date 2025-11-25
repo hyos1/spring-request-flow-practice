@@ -13,6 +13,8 @@ public enum ErrorCode {
 //    JWT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다."),
 //    JWT_PROCESS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "JWT 처리 중 오류가 발생했습니다."),
     INVALID_USER_ROLE(HttpStatus.BAD_REQUEST, "유효하지 않은 UserRole입니다."),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "관리자 전용 기능입니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "토큰이 필요한 기능입니다."),
 
     // 회원 예외 처리
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
