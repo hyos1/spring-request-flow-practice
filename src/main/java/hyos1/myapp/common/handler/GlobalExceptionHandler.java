@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,6 +32,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> serverExHandler(ServerException e) {
         ErrorCode errorCode = e.getErrorCode();
+        log.error("clientExHandler ex", e);
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(ErrorResponse.from(errorCode));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> accessDeniedExHandler(AccessDeniedException e) {
+        ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
         log.error("clientExHandler ex", e);
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(ErrorResponse.from(errorCode));
