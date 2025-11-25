@@ -1,7 +1,7 @@
 package hyos1.myapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 

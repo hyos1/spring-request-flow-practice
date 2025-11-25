@@ -1,6 +1,6 @@
 package hyos1.myapp.service;
 
-import hyos1.myapp.common.OrderStatus;
+import hyos1.myapp.enums.OrderStatus;
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.request.OrderCreateRequest;

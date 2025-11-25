@@ -1,17 +1,15 @@
 package hyos1.myapp.entity;
 
-import hyos1.myapp.common.CouponStatus;
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.CouponStatus;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.common.exception.constant.ErrorCode;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserCouponTest {
 

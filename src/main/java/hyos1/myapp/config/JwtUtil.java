@@ -1,6 +1,6 @@
 package hyos1.myapp.config;
 
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

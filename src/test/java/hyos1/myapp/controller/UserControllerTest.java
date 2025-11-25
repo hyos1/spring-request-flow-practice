@@ -1,7 +1,7 @@
 package hyos1.myapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.config.CustomAuthenticationEntryPoint;
 import hyos1.myapp.config.JwtAuthenticationToken;
 import hyos1.myapp.config.JwtUtil;

@@ -43,15 +43,13 @@ class ItemJpaRepositoryTest {
         System.out.println("변경 전 itemA = " + itemA);
 
         //when
-        ItemUpdateRequest updateDto = new ItemUpdateRequest("updateA", 5000, 5);
-        itemA.setName(updateDto.getItemName());
+        ItemUpdateRequest updateDto = new ItemUpdateRequest(5000, 5);
         itemA.setPrice(updateDto.getPrice());
         itemA.setStock(updateDto.getStock());
         System.out.println("변경 후 itemA = " + itemA);
 
         //then
         Item findItem = itemRepository.findById(itemA.getId()).get();
-        assertThat(findItem.getName()).isEqualTo(updateDto.getItemName());
         assertThat(findItem.getPrice()).isEqualTo(updateDto.getPrice());
         assertThat(findItem.getStock()).isEqualTo(updateDto.getStock());
     }

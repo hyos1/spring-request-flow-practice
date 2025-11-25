@@ -1,13 +1,15 @@
 package hyos1.myapp.dto.request;
 
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class SignUpRequest {
     @NotBlank(message = "이름을 입력해주세요.")
     private String name;

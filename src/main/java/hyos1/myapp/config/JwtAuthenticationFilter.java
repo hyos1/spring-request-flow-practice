@@ -1,7 +1,7 @@
 package hyos1.myapp.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.entity.AuthUser;
 import io.jsonwebtoken.Claims;

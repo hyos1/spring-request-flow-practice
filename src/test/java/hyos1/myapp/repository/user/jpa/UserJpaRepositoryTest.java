@@ -1,7 +1,8 @@
 package hyos1.myapp.repository.user.jpa;
 
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.entity.User;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,23 @@ class UserJpaRepositoryTest {
 
     @Autowired
     UserJpaRepository userRepository;
+    @Autowired
+    EntityManager em;
 
+    @Test
+    void equals() {
+        User user = User.createUser("userA", "test@naver.com", "1234", UserRole.ROLE_USER);
+        User savedUser = userRepository.save(user);
+        System.out.println("user = " + user);
+        assertThat(user).isEqualTo(savedUser);
+        em.flush();
+        em.clear();
+
+        User findUser = userRepository.findById(user.getId()).get();
+        assertThat(user).isEqualTo(findUser);
+        assertThat(savedUser).isEqualTo(findUser);
+
+    }
     @Test
     void saveAndFindById() {
         //given

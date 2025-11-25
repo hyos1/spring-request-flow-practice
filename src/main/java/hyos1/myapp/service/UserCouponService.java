@@ -1,6 +1,5 @@
 package hyos1.myapp.service;
 
-import hyos1.myapp.common.CouponStatus;
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.common.exception.ServerException;
 import hyos1.myapp.common.exception.constant.ErrorCode;

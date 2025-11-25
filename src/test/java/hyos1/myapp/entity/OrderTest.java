@@ -1,9 +1,8 @@
 package hyos1.myapp.entity;
 
-import hyos1.myapp.common.CouponStatus;
-import hyos1.myapp.common.OrderStatus;
-import hyos1.myapp.common.UserRole;
-import org.assertj.core.api.Assertions;
+import hyos1.myapp.enums.CouponStatus;
+import hyos1.myapp.enums.OrderStatus;
+import hyos1.myapp.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTest {
     private User user;

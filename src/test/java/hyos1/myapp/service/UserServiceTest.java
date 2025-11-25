@@ -1,13 +1,12 @@
 package hyos1.myapp.service;
 
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.dto.request.UserUpdateRequest;
 import hyos1.myapp.dto.response.UserResponse;
 import hyos1.myapp.entity.User;
 import hyos1.myapp.repository.user.datajpa.UserDataRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)

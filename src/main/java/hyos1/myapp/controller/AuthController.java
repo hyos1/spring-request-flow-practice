@@ -2,9 +2,11 @@ package hyos1.myapp.controller;
 
 import hyos1.myapp.dto.request.LoginRequest;
 import hyos1.myapp.dto.request.SignUpRequest;
+import hyos1.myapp.dto.response.UserResponse;
 import hyos1.myapp.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,9 +22,9 @@ public class AuthController {
 
     // 회원가입 ✓
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequest request) {
-        authService.signup(request);
-        return ResponseEntity.ok("회원가입 성공");
+    public ResponseEntity<UserResponse> signup(@Valid @RequestBody SignUpRequest request) {
+        UserResponse signup = authService.signup(request);
+        return ResponseEntity.status(HttpStatus.OK).body(signup);
     }
 
     // 로그인 -> JWT 발급 ✓

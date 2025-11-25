@@ -1,4 +1,4 @@
-package hyos1.myapp.common;
+package hyos1.myapp.enums;
 
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.common.exception.constant.ErrorCode;

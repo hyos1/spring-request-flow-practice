@@ -4,6 +4,7 @@ import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.config.JwtUtil;
 import hyos1.myapp.dto.request.LoginRequest;
 import hyos1.myapp.dto.request.SignUpRequest;
+import hyos1.myapp.dto.response.UserResponse;
 import hyos1.myapp.entity.User;
 import hyos1.myapp.repository.user.datajpa.UserDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class AuthService {
 
     // 회원가입
     @Transactional
-    public void signup(SignUpRequest request) {
+    public UserResponse signup(SignUpRequest request) {
         // 이메일 중복 검사
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new ClientException(EMAIL_ALREADY_EXISTS);
@@ -41,7 +42,7 @@ public class AuthService {
                 encodedPassword,
                 request.getUserRole()
         );
-        userRepository.save(user);
+        return UserResponse.fromEntity(userRepository.save(user));
     }
 
     // 로그인

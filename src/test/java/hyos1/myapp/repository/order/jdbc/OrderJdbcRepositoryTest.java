@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.order.jdbc;
 
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.entity.Item;
 import hyos1.myapp.entity.Order;
 import hyos1.myapp.entity.OrderItem;
@@ -37,10 +37,10 @@ class OrderJdbcRepositoryTest {
         itemRepository.save(item1);
         itemRepository.save(item2);
 
-        OrderItem orderItem1 = OrderItem.createOrderItem(item1, item1.getName(), item1.getPrice(), 2);
-        OrderItem orderItem2 = OrderItem.createOrderItem(item2, item2.getName(), item2.getPrice(), 2);
-
-        Order order = Order.createOrder(user, orderItem1, orderItem2);
+        OrderItem orderItem1 = OrderItem.createOrderItem(item1, 2);
+        OrderItem orderItem2 = OrderItem.createOrderItem(item2, 2);
+        List<OrderItem> orderItems = List.of(orderItem1, orderItem2);
+        Order order = Order.createOrder(user,orderItems, null);
 
         //when
         Order savedOrder = orderRepository.save(order);
@@ -59,8 +59,9 @@ class OrderJdbcRepositoryTest {
         Item item = Item.createItem("item1", 1000, 10);
         itemRepository.save(item);
 
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), 1000, 2);
-        Order order = Order.createOrder(user, orderItem);
+        OrderItem orderItem = OrderItem.createOrderItem(item, 2);
+        List<OrderItem> orderItem1 = List.of(orderItem);
+        Order order = Order.createOrder(user, orderItem1, null);
         orderRepository.save(order);
 
         //when
@@ -82,10 +83,10 @@ class OrderJdbcRepositoryTest {
         Item item = Item.createItem("item1", 1000, 10);
         itemRepository.save(item);
 
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), 1000, 2);
-        Order order = Order.createOrder(user, orderItem);
+        OrderItem orderItem = OrderItem.createOrderItem(item, 2);
+        List<OrderItem> orderItem1 = List.of(orderItem);
+        Order order = Order.createOrder(user, orderItem1, null);
         orderRepository.save(order);
-
         // when
         Optional<Order> findOrder = orderRepository.findByIdWithOrderItems(order.getId());
 
@@ -104,8 +105,9 @@ class OrderJdbcRepositoryTest {
         Item item = Item.createItem("itemA", 1000, 10);
         itemRepository.save(item);
 
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), 1000, 2);
-        Order order = Order.createOrder(user, orderItem);
+        OrderItem orderItem = OrderItem.createOrderItem(item, 2);
+        List<OrderItem> orderItem1 = List.of(orderItem);
+        Order order = Order.createOrder(user, orderItem1, null);
         orderRepository.save(order);
 
         //when
@@ -125,8 +127,9 @@ class OrderJdbcRepositoryTest {
         Item item = Item.createItem("itemA", 1000, 10);
         itemRepository.save(item);
 
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getName(), 1000, 2);
-        Order order = Order.createOrder(user, orderItem);
+        OrderItem orderItem = OrderItem.createOrderItem(item, 2);
+        List<OrderItem> orderItem1 = List.of(orderItem);
+        Order order = Order.createOrder(user, orderItem1, null);
         orderRepository.save(order);
 
         //when

@@ -1,6 +1,5 @@
 package hyos1.myapp.config;
 
-import hyos1.myapp.common.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

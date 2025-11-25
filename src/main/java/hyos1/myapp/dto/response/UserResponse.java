@@ -1,6 +1,6 @@
 package hyos1.myapp.dto.response;
 
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

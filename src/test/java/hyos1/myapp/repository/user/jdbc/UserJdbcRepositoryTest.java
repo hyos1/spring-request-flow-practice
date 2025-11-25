@@ -1,7 +1,7 @@
 package hyos1.myapp.repository.user.jdbc;
 
-import hyos1.myapp.common.UserRole;
-import hyos1.myapp.dto.UserUpdateDto;
+import hyos1.myapp.enums.UserRole;
+import hyos1.myapp.dto.request.UserUpdateRequestDtoWithJdbc;
 import hyos1.myapp.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ class UserJdbcRepositoryTest {
         userRepository.save(userA);
 
         //when
-        UserUpdateDto updateDto = new UserUpdateDto("AAA", "wwwwww");
+        UserUpdateRequestDtoWithJdbc updateDto = new UserUpdateRequestDtoWithJdbc("AAA", "wwwwww");
         userRepository.update(userA.getId(), updateDto);
         User findUser = userRepository.findById(userA.getId()).get();
 

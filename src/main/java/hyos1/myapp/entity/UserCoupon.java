@@ -1,6 +1,6 @@
 package hyos1.myapp.entity;
 
-import hyos1.myapp.common.CouponStatus;
+import hyos1.myapp.enums.CouponStatus;
 import hyos1.myapp.common.exception.ClientException;
 import hyos1.myapp.common.exception.constant.ErrorCode;
 import jakarta.persistence.*;

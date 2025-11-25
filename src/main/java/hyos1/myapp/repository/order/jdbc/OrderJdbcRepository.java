@@ -1,6 +1,6 @@
 package hyos1.myapp.repository.order.jdbc;
 
-import hyos1.myapp.common.OrderStatus;
+import hyos1.myapp.enums.OrderStatus;
 import hyos1.myapp.entity.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -40,7 +40,8 @@ public class OrderJdbcRepository {
                 .addValue("order_status", order.getOrderStatus().name())
                 .addValue("user_coupon_id",
                         order.getUserCoupon() != null ? order.getUserCoupon().getId() : null)
-                .addValue("created_at", LocalDateTime.now());
+                .addValue("created_at", LocalDateTime.now())
+                .addValue("final_price", order.getFinalPrice());
         Number orderId = orderInsert.executeAndReturnKey(orderParam);
         order.setId(orderId.longValue());
         //OrderItem 저장
@@ -60,7 +61,7 @@ public class OrderJdbcRepository {
 
     public Optional<Order> findById(Long orderId) {
         // 1. Order 기본 정보 조회
-        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders where order_id = :id";
+        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status, final_price from orders where order_id = :id";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("id", orderId);
         Order order;
@@ -76,7 +77,7 @@ public class OrderJdbcRepository {
     // OrderItems 같이 조회
     public Optional<Order> findByIdWithOrderItems(Long orderId) {
         // 1. Order 기본 정보 조회
-        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders where order_id = :id";
+        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status, final_price from orders where order_id = :id";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("id", orderId);
         Order order;
@@ -100,14 +101,14 @@ public class OrderJdbcRepository {
 
     public List<Order> findAll() {
         // 1. Order 기본 정보 전체 조회
-        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders";
+        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status, final_price from orders";
         List<Order> orders = template.query(sql, orderRowMapper());
         return orders;
     }
 
     public List<Order> findAllWithOrderItems() {
         // Order 기본 정보 전체 조회
-        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status from orders";
+        String sql = "select order_id as id, created_at, user_id, user_coupon_id, order_status, final_price from orders";
         List<Order> orders = template.query(sql, orderRowMapper());
 
         // OrderItem 조회
@@ -130,6 +131,7 @@ public class OrderJdbcRepository {
             order.setId(rs.getLong("id"));
             order.setOrderStatus(OrderStatus.valueOf(rs.getString("order_status")));
             order.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+            order.setFinalPrice(rs.getInt("final_price"));
 
             // User ID만 세팅, 실제 User는 필요하면 Service쪽에서 세팅하기.
             User user = new User();

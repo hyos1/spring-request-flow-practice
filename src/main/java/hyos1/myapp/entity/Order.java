@@ -1,6 +1,6 @@
 package hyos1.myapp.entity;
 
-import hyos1.myapp.common.OrderStatus;
+import hyos1.myapp.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hyos1.myapp.common.OrderStatus.CANCEL;
-import static hyos1.myapp.common.OrderStatus.ORDER;
+import static hyos1.myapp.enums.OrderStatus.CANCEL;
+import static hyos1.myapp.enums.OrderStatus.ORDER;
 
 @Entity
 @Table(name = "orders")

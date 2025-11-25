@@ -1,6 +1,6 @@
 package hyos1.myapp.dto.response;
 
-import hyos1.myapp.common.OrderStatus;
+import hyos1.myapp.enums.OrderStatus;
 import hyos1.myapp.entity.Order;
 import hyos1.myapp.entity.OrderItem;
 import lombok.AllArgsConstructor;

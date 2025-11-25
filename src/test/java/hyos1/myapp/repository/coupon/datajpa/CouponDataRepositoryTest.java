@@ -25,6 +25,5 @@ class CouponDataRepositoryTest {
 
         Optional<Coupon> findCoupon = couponRepository.findById(coupon.getId());
         Assertions.assertThat(coupon).isEqualTo(findCoupon.get());
-
     }
 }

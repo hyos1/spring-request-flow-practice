@@ -51,10 +51,9 @@ public class ItemJdbcRepository {
 
     public void update(Long itemId, ItemUpdateRequest updateParam) {
         String sql = "update items " +
-                "set name = :itemName, price = :price, stock = :stock " +
+                "set price = :price, stock = :stock " +
                 "where item_id = :id";
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("itemName", updateParam.getItemName())
                 .addValue("price", updateParam.getPrice())
                 .addValue("stock", updateParam.getStock())
                 .addValue("id", itemId);

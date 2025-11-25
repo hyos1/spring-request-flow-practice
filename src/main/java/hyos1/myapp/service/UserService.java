@@ -79,7 +79,7 @@ public class UserService {
 
         // 아이디로 본인 확인
         if (!authUserId.equals(userId)) {
-            throw new AccessDeniedException("본인만 탈퇴할 수 있습니다.");
+            throw new ClientException(ErrorCode.USER_NOT_OWNER);
         }
 
         if (user.isDeleted()) {

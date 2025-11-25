@@ -43,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // 회원 탈퇴 XXXXX
+    // Soft Delete Or 삭제 나중에 결정
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId,
                                            @AuthenticationPrincipal AuthUser authUser) {
