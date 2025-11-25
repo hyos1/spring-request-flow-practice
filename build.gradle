@@ -43,7 +43,12 @@ dependencies {
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// Security Test
+	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	//BDD Mockito
+	testImplementation 'org.mockito:mockito-core:5.4.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.4.0'
 
 	// jwt
 	compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
