@@ -75,10 +75,9 @@ src/
 - Controller/Service 단계에서 발생한 예외 → GlobalExceptionHandler 처리  
 
 ### 4. 데이터 접근 기술 비교  
-- JdbcTemplate 기반 구현  
-- JPA EntityManager 기반 구현  
-- Spring Data JPA Repository 기반 구현  
-- 동일한 기능을 각각 다른 방식으로 구현하여 비교 학습  
+- JdbcTemplate에서는 CRUD 중심으로,
+- JPA와 Spring Data JPA에서는 연관관계 및 페치 전략 등을 포함해
+  데이터 접근 방식별 특징을 비교하며 구현했습니다. 
 
 ### 5. 조회 시 N + 1 문제 학습  
 - 단일 엔티티: fetch join  
