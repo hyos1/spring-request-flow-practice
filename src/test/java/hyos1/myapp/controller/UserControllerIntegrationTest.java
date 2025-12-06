@@ -1,7 +1,7 @@
 package hyos1.myapp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hyos1.myapp.common.UserRole;
+import hyos1.myapp.enums.UserRole;
 import hyos1.myapp.common.exception.constant.ErrorCode;
 import hyos1.myapp.config.JwtUtil;
 import hyos1.myapp.dto.request.UserUpdateRequest;
@@ -31,6 +31,8 @@ class UserControllerIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
+//    @Autowired
+//    private UserDataRepository userRepository;
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired

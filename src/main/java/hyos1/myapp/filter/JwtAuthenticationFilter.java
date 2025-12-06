@@ -119,4 +119,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         errorResponse.put("message", message);
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+
+        if (path.equals("/") || path.equals("/index.html")) {
+            return true;
+        }
+
+        return false;
+    }
 }

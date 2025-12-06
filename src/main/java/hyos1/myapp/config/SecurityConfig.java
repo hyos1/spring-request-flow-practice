@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
 
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/", "/index.html").permitAll()
                                 .requestMatchers(request -> request.getRequestURI().startsWith("/auth")).permitAll()
                                 .requestMatchers("/auth/refresh").authenticated() // 토큰 재발급은 JWT 필요 (추가 예정)
                                 .requestMatchers("/user_coupons", "/user_coupons/**").authenticated()
