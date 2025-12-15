@@ -1,17 +1,17 @@
 # Spring Web Flow & Data Access Practice
 
 **스프링 웹 애플리케이션의 요청 흐름을 이해하고, JWT 기반 인증/인가를 적용 및  
-다양한 데이터 접근 방법을 실습하며,  
-객체지향 설계와 테스트 코드, 동시성 문제까지 다뤄보는 학습용 프로젝트입니다.**
+다양한 데이터 접근 방법을 적용하며,  
+객체지향 설계와 테스트 코드, 동시성 문제까지 다뤄보는 프로젝트입니다.**
 
 ---
 
 # 프로젝트 소개
 
 - Spring MVC 요청 흐름(Filter → DispatcherServlet → Controller → Service → Repository → DB) 실습  
-- Filter, Controller, Service 계층에서 발생하는 예외 처리 실습  
+- Filter, Controller, Service 계층에서 발생하는 예외 처리  
 - JWT 기반 인증/인가 적용  
-- JdbcTemplate, JPA, Spring Data JPA 3가지 데이터 접근 기술 학습 및 비교  
+- JdbcTemplate, JPA, Spring Data JPA 3가지 데이터 접근 기술 적용 및 비교  
 - 쿠폰 발급 API를 통한 동시성 문제 실습 및 Jmeter로 테스트  
 - 객체지향 설계 원칙(OOP) 적용 및 JUnit 테스트 코드 작성  
 
@@ -77,7 +77,7 @@ src/
 ### 4. 데이터 접근 기술 비교  
 - JdbcTemplate에서는 CRUD 중심으로,
 - JPA와 Spring Data JPA에서는 연관관계 및 페치 전략 등을 포함해
-  데이터 접근 방식별 특징을 비교하며 구현했습니다. 
+  데이터 접근 방식별 특징을 비교하며 구현 
 
 ### 5. 조회 시 N + 1 문제 학습  
 - 단일 엔티티: fetch join  
